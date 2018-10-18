@@ -12,27 +12,25 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     using System.Linq;
 
     /// <summary>
-    /// Results of a bulk enrollment operation
+    /// Results of an enrollment operation
     /// </summary>
-    public partial class BulkEnrollmentOperationResult
+    public partial class EnrollmentOperationResult
     {
         /// <summary>
-        /// Initializes a new instance of the BulkEnrollmentOperationResult
-        /// class.
+        /// Initializes a new instance of the EnrollmentOperationResult class.
         /// </summary>
-        public BulkEnrollmentOperationResult()
+        public EnrollmentOperationResult()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the BulkEnrollmentOperationResult
-        /// class.
+        /// Initializes a new instance of the EnrollmentOperationResult class.
         /// </summary>
         /// <param name="isSuccessful">Indicates if the operation was
         /// successful in its entirety</param>
         /// <param name="errors">Registration errors</param>
-        public BulkEnrollmentOperationResult(bool isSuccessful, IList<BulkEnrollmentOperationError> errors = default(IList<BulkEnrollmentOperationError>))
+        public EnrollmentOperationResult(bool isSuccessful, IList<EnrollmentOperationError> errors = default(IList<EnrollmentOperationError>))
         {
             IsSuccessful = isSuccessful;
             Errors = errors;
@@ -55,7 +53,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// Gets or sets registration errors
         /// </summary>
         [JsonProperty(PropertyName = "errors")]
-        public IList<BulkEnrollmentOperationError> Errors { get; set; }
+        public IList<EnrollmentOperationError> Errors { get; set; }
 
         /// <summary>
         /// Validate the object.

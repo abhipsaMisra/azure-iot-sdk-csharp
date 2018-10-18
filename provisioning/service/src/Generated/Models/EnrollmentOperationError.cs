@@ -11,27 +11,25 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     using System.Linq;
 
     /// <summary>
-    /// Bulk enrollment operation error
+    /// Enrollment operation error
     /// </summary>
-    public partial class BulkEnrollmentOperationError
+    public partial class EnrollmentOperationError
     {
         /// <summary>
-        /// Initializes a new instance of the BulkEnrollmentOperationError
-        /// class.
+        /// Initializes a new instance of the EnrollmentOperationError class.
         /// </summary>
-        public BulkEnrollmentOperationError()
+        public EnrollmentOperationError()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the BulkEnrollmentOperationError
-        /// class.
+        /// Initializes a new instance of the EnrollmentOperationError class.
         /// </summary>
         /// <param name="registrationId">Device registration id.</param>
         /// <param name="errorCode">Error code</param>
         /// <param name="errorStatus">Error status</param>
-        public BulkEnrollmentOperationError(string registrationId, int errorCode, string errorStatus)
+        public EnrollmentOperationError(string registrationId, int errorCode, string errorStatus)
         {
             RegistrationId = registrationId;
             ErrorCode = errorCode;

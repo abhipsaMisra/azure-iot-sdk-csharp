@@ -13,25 +13,27 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     using System.Linq;
 
     /// <summary>
-    /// Bulk operation
+    /// Individual Enrollment operation
     /// </summary>
-    public partial class BulkEnrollmentOperation
+    public partial class IndividualEnrollmentOperation
     {
         /// <summary>
-        /// Initializes a new instance of the BulkEnrollmentOperation class.
+        /// Initializes a new instance of the IndividualEnrollmentOperation
+        /// class.
         /// </summary>
-        public BulkEnrollmentOperation()
+        public IndividualEnrollmentOperation()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the BulkEnrollmentOperation class.
+        /// Initializes a new instance of the IndividualEnrollmentOperation
+        /// class.
         /// </summary>
         /// <param name="enrollments">Enrollment items</param>
         /// <param name="mode">Operation mode. Possible values include:
         /// 'create', 'update', 'updateIfMatchETag', 'delete'</param>
-        public BulkEnrollmentOperation(IList<IndividualEnrollment> enrollments, string mode)
+        public IndividualEnrollmentOperation(IList<IndividualEnrollment> enrollments, string mode)
         {
             Enrollments = enrollments;
             Mode = mode;

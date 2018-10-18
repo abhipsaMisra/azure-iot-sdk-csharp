@@ -38,32 +38,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             }
 
             /// <summary>
-            /// Create or update a device enrollment record.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// The registration ID is alphanumeric, lowercase, and may contain hyphens.
-            /// </param>
-            /// <param name='enrollment'>
-            /// The device enrollment record.
-            /// </param>
-            /// <param name='ifMatch'>
-            /// The ETag of the enrollment record.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IndividualEnrollment> CreateOrUpdateIndividualEnrollmentAsync(this IProvisioningServiceClient operations, string id, IndividualEnrollment enrollment, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.CreateOrUpdateIndividualEnrollmentWithHttpMessagesAsync(id, enrollment, ifMatch, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
             /// Delete a device enrollment record.
             /// </summary>
             /// <param name='operations'>
@@ -98,32 +72,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             public static async Task<EnrollmentGroup> GetEnrollmentGroupAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetEnrollmentGroupWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Create or update a device enrollment group.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// Enrollment group ID.
-            /// </param>
-            /// <param name='enrollmentGroup'>
-            /// The device enrollment group.
-            /// </param>
-            /// <param name='ifMatch'>
-            /// The ETag of the enrollment record.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<EnrollmentGroup> CreateOrUpdateEnrollmentGroupAsync(this IProvisioningServiceClient operations, string id, EnrollmentGroup enrollmentGroup, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.CreateOrUpdateEnrollmentGroupWithHttpMessagesAsync(id, enrollmentGroup, ifMatch, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -190,20 +138,40 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             }
 
             /// <summary>
-            /// Bulk device enrollment operation.
+            /// Individual device enrollment operation.
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='bulkOperation'>
-            /// Bulk operation.
+            /// <param name='individualEnrollmentOperation'>
+            /// Indovidual enrollment operation.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<BulkEnrollmentOperationResult> RunBulkEnrollmentOperationAsync(this IProvisioningServiceClient operations, BulkEnrollmentOperation bulkOperation, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<EnrollmentOperationResult> RunIndividualEnrollmentOperationAsync(this IProvisioningServiceClient operations, IndividualEnrollmentOperation individualEnrollmentOperation, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.RunBulkEnrollmentOperationWithHttpMessagesAsync(bulkOperation, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.RunIndividualEnrollmentOperationWithHttpMessagesAsync(individualEnrollmentOperation, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Device enrollment group operation.
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='enrollmentGroupOperation'>
+            /// Enrollment Group operation.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<EnrollmentOperationResult> RunEnrollmentGroupsOperationAsync(this IProvisioningServiceClient operations, EnrollmentGroupOperation enrollmentGroupOperation, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.RunEnrollmentGroupsOperationWithHttpMessagesAsync(enrollmentGroupOperation, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

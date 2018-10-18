@@ -48,61 +48,6 @@
           }
         }
       },
-      "put": {
-        "tags": [
-          "PUT"
-        ],
-        "summary": "Create or update a device enrollment record.",
-        "operationId": "CreateOrUpdateIndividualEnrollment",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The registration ID is alphanumeric, lowercase, and may contain hyphens.",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "enrollment",
-            "in": "body",
-            "description": "The device enrollment record.",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/IndividualEnrollment"
-            }
-          },
-          {
-            "name": "If-Match",
-            "in": "header",
-            "description": "The ETag of the enrollment record.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "$ref": "#/parameters/ApiVersionParameter"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/IndividualEnrollment"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ProvisioningServiceErrorDetails"
-            }
-          }
-        }
-      },
       "delete": {
         "tags": [
           "DELETE"
@@ -160,61 +105,6 @@
             "in": "path",
             "description": "Enrollment group ID.",
             "required": true,
-            "type": "string"
-          },
-          {
-            "$ref": "#/parameters/ApiVersionParameter"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/EnrollmentGroup"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ProvisioningServiceErrorDetails"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "PUT"
-        ],
-        "summary": "Create or update a device enrollment group.",
-        "operationId": "CreateOrUpdateEnrollmentGroup",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Enrollment group ID.",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "enrollmentGroup",
-            "in": "body",
-            "description": "The device enrollment group.",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/EnrollmentGroup"
-            }
-          },
-          {
-            "name": "If-Match",
-            "in": "header",
-            "description": "The ETag of the enrollment record.",
-            "required": false,
             "type": "string"
           },
           {
@@ -359,8 +249,8 @@
         "tags": [
           "POST"
         ],
-        "summary": "Bulk device enrollment operation.",
-        "operationId": "RunBulkEnrollmentOperation",
+        "summary": "Individual device enrollment operation.",
+        "operationId": "RunIndividualEnrollmentOperation",
         "consumes": [
           "application/json"
         ],
@@ -369,12 +259,12 @@
         ],
         "parameters": [
           {
-            "name": "bulkOperation",
+            "name": "individualEnrollmentOperation",
             "in": "body",
-            "description": "Bulk operation.",
+            "description": "Indovidual enrollment operation.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/BulkEnrollmentOperation"
+              "$ref": "#/definitions/IndividualEnrollmentOperation"
             }
           },
           {
@@ -385,7 +275,50 @@
           "200": {
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/BulkEnrollmentOperationResult"
+              "$ref": "#/definitions/EnrollmentOperationResult"
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "schema": {
+              "$ref": "#/definitions/ProvisioningServiceErrorDetails"
+            }
+          }
+        }
+      }
+    },
+    "/enrollmentGroups": {
+      "post": {
+        "tags": [
+          "POST"
+        ],
+        "summary": "Device enrollment group operation.",
+        "operationId": "RunEnrollmentGroupsOperation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "enrollmentGroupOperation",
+            "in": "body",
+            "description": "Enrollment Group operation.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EnrollmentGroupOperation"
+            }
+          },
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/EnrollmentOperationResult"
             }
           },
           "default": {
@@ -1161,8 +1094,8 @@
         }
       }
     },
-    "BulkEnrollmentOperation": {
-      "description": "Bulk operation",
+    "IndividualEnrollmentOperation": {
+      "description": "Individual Enrollment operation",
       "required": [
         "enrollments",
         "mode"
@@ -1188,12 +1121,39 @@
         }
       }
     },
-    "BulkEnrollmentOperationResult": {
+    "EnrollmentGroupOperation": {
+      "description": "Enrollment Group operation",
+      "required": [
+        "enrollments",
+        "mode"
+      ],
+      "type": "object",
+      "properties": {
+        "enrollments": {
+          "description": "Enrollment items",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EnrollmentGroup"
+          }
+        },
+        "mode": {
+          "description": "Operation mode",
+          "enum": [
+            "create",
+            "update",
+            "updateIfMatchETag",
+            "delete"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "EnrollmentOperationResult": {
       "required": [
         "isSuccessful"
       ],
       "type": "object",
-      "description": "Results of a bulk enrollment operation",
+      "description": "Results of an enrollment operation",
       "properties": {
         "isSuccessful": {
           "description": "Indicates if the operation was successful in its entirety",
@@ -1203,13 +1163,13 @@
           "description": "Registration errors",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/BulkEnrollmentOperationError"
+            "$ref": "#/definitions/EnrollmentOperationError"
           }
         }
       }
     },
-    "BulkEnrollmentOperationError": {
-      "description": "Bulk enrollment operation error",
+    "EnrollmentOperationError": {
+      "description": "Enrollment operation error",
       "required": [
         "registrationId",
         "errorCode",
