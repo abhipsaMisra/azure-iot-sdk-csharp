@@ -36,7 +36,42 @@
   <ItemGroup>
     <Compile Include="$(Common)\CommonExtensions.cs" />
     <Compile Include="$(Common)\ProductInfo.cs" />
-    <Compile Include="$(Common)\provisioning\Authentication\*.cs" />
+    <Compile Include="$(Common)\provisioning\Authentication\AuthenticationMethodFactory.cs">
+      <Link>Common\provisioning\Authentication\AuthenticationMethodFactory.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\IAuthenticationMethod.cs">
+      <Link>Common\provisioning\Authentication\IAuthenticationMethod.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\IAuthorizationHeaderProvider.cs">
+      <Link>Common\provisioning\Authentication\IAuthorizationHeaderProvider.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\ServiceAuthenticationWithSharedAccessPolicyKey.cs">
+      <Link>Common\provisioning\Authentication\ServiceAuthenticationWithSharedAccessPolicyKey.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\ServiceAuthenticationWithSharedAccessPolicyToken.cs">
+      <Link>Common\provisioning\Authentication\ServiceAuthenticationWithSharedAccessPolicyToken.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\ServiceConnectionString.cs">
+      <Link>Common\provisioning\Authentication\ServiceConnectionString.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\ServiceConnectionStringBuilder.cs">
+      <Link>Common\provisioning\Authentication\ServiceConnectionStringBuilder.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\SharedAccessKeyCredentials.cs">
+      <Link>Common\provisioning\Authentication\SharedAccessKeyCredentials.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\SharedAccessSignature.cs">
+      <Link>Common\provisioning\Authentication\SharedAccessSignature.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\SharedAccessSignatureBuilder.cs">
+      <Link>Common\provisioning\Authentication\SharedAccessSignatureBuilder.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\SharedAccessSignatureConstants.cs">
+      <Link>Common\provisioning\Authentication\SharedAccessSignatureConstants.cs</Link>
+    </Compile>
+    <Compile Include="$(Common)\provisioning\Authentication\SharedAccessSignatureCredentials.cs">
+      <Link>Common\provisioning\Authentication\SharedAccessSignatureCredentials.cs</Link>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
