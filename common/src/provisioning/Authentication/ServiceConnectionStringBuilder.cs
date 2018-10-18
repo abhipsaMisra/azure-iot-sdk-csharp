@@ -1,15 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Azure.Devices.Common;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
-using SharedAccessSignatureParser = Microsoft.Azure.Devices.Common.Service.Auth.SharedAccessSignature;
+using SharedAccessSignatureParser = Microsoft.Azure.Devices.Provisioning.Service.SharedAccessSignature;
 
-namespace Microsoft.Azure.Devices.Common.Service.Auth
+namespace Microsoft.Azure.Devices.Provisioning.Service
 {
     /// <summary>
     /// The Service Connection String Builder class

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Microsoft.Azure.Devices.Common.Service.Auth;
+using Microsoft.Azure.Devices.Provisioning.Service;
 using Microsoft.Rest;
 using System;
 using System.Collections.Generic;

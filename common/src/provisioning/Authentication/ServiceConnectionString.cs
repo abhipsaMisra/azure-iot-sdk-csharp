@@ -4,7 +4,7 @@
 using System;
 using System.Text;
 
-namespace Microsoft.Azure.Devices.Common.Service.Auth
+namespace Microsoft.Azure.Devices.Provisioning.Service
 {
     /// <summary>
     /// This object handles the connection string for the Azure IoT Services.

@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="$(Common)\CommonExtensions.cs" />
     <Compile Include="$(Common)\ProductInfo.cs" />
+    <Compile Include="$(Common)\provisioning\Authentication\*.cs" />
   </ItemGroup>
 
   <ItemGroup>

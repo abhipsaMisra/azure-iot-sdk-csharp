@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Azure.Devices.Common.Service.Auth
+namespace Microsoft.Azure.Devices.Provisioning.Service
 {
     /// <summary>
     /// Authentication method that uses a shared access policy key. 
