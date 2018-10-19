@@ -32,8 +32,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// </summary>
         /// <param name="registrationId">The registration ID is alphanumeric,
         /// lowercase, and may contain hyphens.</param>
-        /// <param name="attestation">Attestation method used by the
-        /// device.</param>
         /// <param name="capabilities">Capabilities of the device</param>
         /// <param name="deviceId">Desired IoT Hub device ID
         /// (optional).</param>
@@ -72,13 +70,12 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// level list of IoT hubs.</param>
         /// <param name="customAllocationDefinition">Custom allocation
         /// definition.</param>
-        public IndividualEnrollmentResponse(string registrationId, AttestationMechanismResponse attestation, DeviceCapabilities capabilities = default(DeviceCapabilities), string deviceId = default(string), DeviceRegistrationState registrationState = default(DeviceRegistrationState), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
+        public IndividualEnrollmentResponse(string registrationId, DeviceCapabilities capabilities = default(DeviceCapabilities), string deviceId = default(string), DeviceRegistrationState registrationState = default(DeviceRegistrationState), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
         {
             Capabilities = capabilities;
             RegistrationId = registrationId;
             DeviceId = deviceId;
             RegistrationState = registrationState;
-            Attestation = attestation;
             IotHubHostName = iotHubHostName;
             InitialTwin = initialTwin;
             Etag = etag;
@@ -121,12 +118,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// </summary>
         [JsonProperty(PropertyName = "registrationState")]
         public DeviceRegistrationState RegistrationState { get; private set; }
-
-        /// <summary>
-        /// Gets or sets attestation method used by the device.
-        /// </summary>
-        [JsonProperty(PropertyName = "attestation")]
-        public AttestationMechanismResponse Attestation { get; set; }
 
         /// <summary>
         /// Gets or sets the Iot Hub host name.
@@ -219,17 +210,9 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "RegistrationId");
             }
-            if (Attestation == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Attestation");
-            }
             if (Capabilities != null)
             {
                 Capabilities.Validate();
-            }
-            if (Attestation != null)
-            {
-                Attestation.Validate();
             }
             if (ReprovisionPolicy != null)
             {

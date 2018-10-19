@@ -317,6 +317,14 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                         new Iso8601TimeSpanConverter()
                     }
             };
+            SerializationSettings.Converters.Add(new PolymorphicSerializeJsonConverter<IndividualEnrollmentRequest>("objectType"));
+            DeserializationSettings.Converters.Add(new  PolymorphicDeserializeJsonConverter<IndividualEnrollmentRequest>("objectType"));
+            SerializationSettings.Converters.Add(new PolymorphicSerializeJsonConverter<IndividualEnrollmentResponse>("objectType"));
+            DeserializationSettings.Converters.Add(new  PolymorphicDeserializeJsonConverter<IndividualEnrollmentResponse>("objectType"));
+            SerializationSettings.Converters.Add(new PolymorphicSerializeJsonConverter<EnrollmentGroupRequest>("objectType"));
+            DeserializationSettings.Converters.Add(new  PolymorphicDeserializeJsonConverter<EnrollmentGroupRequest>("objectType"));
+            SerializationSettings.Converters.Add(new PolymorphicSerializeJsonConverter<EnrollmentGroupResponse>("objectType"));
+            DeserializationSettings.Converters.Add(new  PolymorphicDeserializeJsonConverter<EnrollmentGroupResponse>("objectType"));
             CustomInitialize();
         }
         /// <summary>

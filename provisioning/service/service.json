@@ -630,12 +630,17 @@
     },
     "IndividualEnrollmentRequest": {
       "description": "The device enrollment record.",
+      "discriminator": "objectType",
       "required": [
         "registrationId",
-        "attestation"
+        "objectType"
       ],
       "type": "object",
       "properties": {
+        "objectType": {
+          "description": "The type of enrollment",
+          "type": "string"
+        },
         "capabilities": {
           "$ref": "#/definitions/DeviceCapabilities",
           "description": "Capabilities of the device"
@@ -652,10 +657,6 @@
           "$ref": "#/definitions/DeviceRegistrationState",
           "description": "Current registration status.",
           "readOnly": true
-        },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanismRequest",
-          "description": "Attestation method used by the device."
         },
         "iotHubHostName": {
           "description": "The Iot Hub host name.",
@@ -707,12 +708,17 @@
     },
     "IndividualEnrollmentResponse": {
       "description": "The device enrollment record.",
+      "discriminator": "objectType",
       "required": [
         "registrationId",
-        "attestation"
+        "objectType"
       ],
       "type": "object",
       "properties": {
+        "objectType": {
+          "description": "The type of enrollment response",
+          "type": "string"
+        },
         "capabilities": {
           "$ref": "#/definitions/DeviceCapabilities",
           "description": "Capabilities of the device"
@@ -729,10 +735,6 @@
           "$ref": "#/definitions/DeviceRegistrationState",
           "description": "Current registration status.",
           "readOnly": true
-        },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanismResponse",
-          "description": "Attestation method used by the device."
         },
         "iotHubHostName": {
           "description": "The Iot Hub host name.",
@@ -791,6 +793,202 @@
         "customAllocationDefinition": {
           "$ref": "#/definitions/CustomAllocationDefinition",
           "description": "Custom allocation definition."
+        }
+      }
+    },
+    "TpmIndividualEnrollmentRequest": {
+      "description": "The TPM device enrollment record.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollmentRequest"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/TpmAttestation",
+          "description": "TPM attestation method."
+        }
+      }
+    },
+    "TpmIndividualEnrollmentResponse": {
+      "description": "The TPM device enrollment record.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollmentResponse"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/TpmAttestation",
+          "description": "TPM attestation method."
+        }
+      }
+    },
+    "X509CertificateIndividualEnrollmentRequest": {
+      "description": "The X509 device enrollment record - with Client Certificate.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollmentRequest"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/X509CertificatesRequest",
+          "description": "X509 Primary and secondary certificates"
+        }
+      }
+    },
+    "X509CertificateIndividualEnrollmentResponse": {
+      "description": "The X509 device enrollment record - with Client Certificate.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollmentResponse"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/X509CertificatesResponse",
+          "description": "X509 Primary and secondary certificates"
+        }
+      }
+    },
+    "X509CertificateEnrollmentGroupRequest": {
+      "description": "The X509 device enrollment record - with Signing Certificate.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroupRequest"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/X509CertificatesRequest",
+          "description": "X509 Primary and secondary certificates"
+        }
+      }
+    },
+    "X509CertificateEnrollmentGroupResponse": {
+      "description": "The X509 device enrollment record - with Signing Certificate.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroupResponse"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/X509CertificatesResponse",
+          "description": "X509 Primary and secondary certificates"
+        }
+      }
+    },
+    "X509CAReferencesIndividualEnrollmentRequest": {
+      "description": "The X509 device enrollment record - with CA References.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollmentRequest"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/X509CAReferences",
+          "description": "X509 CA References attestation method."
+        }
+      }
+    },
+    "X509CAReferencesIndividualEnrollmentResponse": {
+      "description": "The X509 device enrollment record - with CA References.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollmentResponse"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/X509CAReferences",
+          "description": "X509 CA References attestation method."
+        }
+      }
+    },
+    "X509CAReferencesEnrollmentGroupRequest": {
+      "description": "The X509 device enrollment record - with CA References.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroupRequest"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/X509CAReferences",
+          "description": "X509 CA References attestation method."
+        }
+      }
+    },
+    "X509CAReferencesEnrollmentGroupResponse": {
+      "description": "The X509 device enrollment record - with CA References.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroupResponse"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/X509CAReferences",
+          "description": "X509 CA References attestation method."
+        }
+      }
+    },
+    "SymmetricKeyIndividualEnrollmentRequest": {
+      "description": "The device enrollment record - with Symmetric Key.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollmentRequest"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/SymmetricKeyAttestation",
+          "description": "Symmetric Key attestation method."
+        }
+      }
+    },
+    "SymmetricKeyIndividualEnrollmentResponse": {
+      "description": "The device enrollment record - with Symmetric Key.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollmentResponse"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/SymmetricKeyAttestation",
+          "description": "Symmetric Key attestation method."
+        }
+      }
+    },
+    "SymmetricKeyEnrollmentGroupRequest": {
+      "description": "The device enrollment record - with Symmetric Key.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroupRequest"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/SymmetricKeyAttestation",
+          "description": "Symmetric Key attestation method."
+        }
+      }
+    },
+    "SymmetricKeyEnrollmentGroupResponse": {
+      "description": "The device enrollment record - with Symmetric Key.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroupResponse"}],
+      "required": [
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "attestation": {
+          "$ref": "#/definitions/SymmetricKeyAttestation",
+          "description": "Symmetric Key attestation method."
         }
       }
     },
@@ -876,37 +1074,6 @@
           "description": "The entity tag associated with the resource.",
           "type": "string",
           "readOnly": true
-        }
-      }
-    },
-    "AttestationMechanismRequest": {
-      "description": "Attestation mechanism for individualEnrollment as well as enrollmentGroup",
-      "required": [
-        "type"
-      ],
-      "type": "object",
-      "properties": {
-        "type": {
-          "description": "Attestation Type.",
-          "enum": [
-            "none",
-            "tpm",
-            "x509",
-            "symmetricKey"
-          ],
-          "type": "string"
-        },
-        "tpm": {
-          "$ref": "#/definitions/TpmAttestation",
-          "description": "TPM attestation method."
-        },
-        "x509": {
-          "$ref": "#/definitions/X509AttestationRequest",
-          "description": "X509 attestation method."
-        },
-        "symmetricKey": {
-          "$ref": "#/definitions/SymmetricKeyAttestation",
-          "description": "Symmetric Key attestation method."
         }
       }
     },
@@ -1005,21 +1172,6 @@
         },
         "storageRootKey": {
           "type": "string"
-        }
-      }
-    },
-    "X509AttestationRequest": {
-      "description": "Attestation via X509.",
-      "type": "object",
-      "properties": {
-        "clientCertificates": {
-          "$ref": "#/definitions/X509CertificatesRequest"
-        },
-        "signingCertificates": {
-          "$ref": "#/definitions/X509CertificatesRequest"
-        },
-        "caReferences": {
-          "$ref": "#/definitions/X509CAReferences"
         }
       }
     },
@@ -1164,19 +1316,20 @@
     },
     "EnrollmentGroupRequest": {
       "description": "Enrollment group record.",
+      "discriminator": "objectType",
       "required": [
         "enrollmentGroupId",
-        "attestation"
+        "objectType"
       ],
       "type": "object",
       "properties": {
+        "objectType": {
+          "description": "The type of enrollment",
+          "type": "string"
+        },
         "enrollmentGroupId": {
           "description": "Enrollment Group ID.",
           "type": "string"
-        },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanismRequest",
-          "description": "Attestation method used by the device."
         },
         "iotHubHostName": {
           "description": "The Iot Hub host name.",
@@ -1228,19 +1381,20 @@
     },
     "EnrollmentGroupResponse": {
       "description": "Enrollment group record.",
+      "discriminator": "objectType",
       "required": [
         "enrollmentGroupId",
-        "attestation"
+        "objectType"
       ],
       "type": "object",
       "properties": {
+        "objectType": {
+          "description": "The type of enrollment response",
+          "type": "string"
+        },
         "enrollmentGroupId": {
           "description": "Enrollment Group ID.",
           "type": "string"
-        },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanismResponse",
-          "description": "Attestation method used by the device."
         },
         "iotHubHostName": {
           "description": "The Iot Hub host name.",
