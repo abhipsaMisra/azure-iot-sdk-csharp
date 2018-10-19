@@ -138,40 +138,20 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             }
 
             /// <summary>
-            /// Individual device enrollment operation.
+            /// Device enrollment operation.
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='individualEnrollmentOperation'>
-            /// Indovidual enrollment operation.
+            /// <param name='enrollmentOperation'>
+            /// Individual enrollment operation.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<EnrollmentOperationResult> RunIndividualEnrollmentOperationAsync(this IProvisioningServiceClient operations, IndividualEnrollmentOperation individualEnrollmentOperation, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<EnrollmentOperationResult> RunEnrollmentOperationAsync(this IProvisioningServiceClient operations, EnrollmentOperation enrollmentOperation, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.RunIndividualEnrollmentOperationWithHttpMessagesAsync(individualEnrollmentOperation, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Device enrollment group operation.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='enrollmentGroupOperation'>
-            /// Enrollment Group operation.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<EnrollmentOperationResult> RunEnrollmentGroupsOperationAsync(this IProvisioningServiceClient operations, EnrollmentGroupOperation enrollmentGroupOperation, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.RunEnrollmentGroupsOperationWithHttpMessagesAsync(enrollmentGroupOperation, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.RunEnrollmentOperationWithHttpMessagesAsync(enrollmentOperation, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

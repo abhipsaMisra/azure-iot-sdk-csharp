@@ -249,8 +249,8 @@
         "tags": [
           "POST"
         ],
-        "summary": "Individual device enrollment operation.",
-        "operationId": "RunIndividualEnrollmentOperation",
+        "summary": "Device enrollment operation.",
+        "operationId": "RunEnrollmentOperation",
         "consumes": [
           "application/json"
         ],
@@ -259,55 +259,12 @@
         ],
         "parameters": [
           {
-            "name": "individualEnrollmentOperation",
+            "name": "enrollmentOperation",
             "in": "body",
-            "description": "Indovidual enrollment operation.",
+            "description": "Individual enrollment operation.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/IndividualEnrollmentOperation"
-            }
-          },
-          {
-            "$ref": "#/parameters/ApiVersionParameter"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/EnrollmentOperationResult"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ProvisioningServiceErrorDetails"
-            }
-          }
-        }
-      }
-    },
-    "/enrollmentGroups": {
-      "post": {
-        "tags": [
-          "POST"
-        ],
-        "summary": "Device enrollment group operation.",
-        "operationId": "RunEnrollmentGroupsOperation",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "enrollmentGroupOperation",
-            "in": "body",
-            "description": "Enrollment Group operation.",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/EnrollmentGroupOperation"
+              "$ref": "#/definitions/EnrollmentOperation"
             }
           },
           {
@@ -628,30 +585,17 @@
         }
       }
     },
-    "IndividualEnrollment": {
-      "description": "The device enrollment record.",
-      "required": [
-        "registrationId",
-        "attestation"
-      ],
+    "Enrollment": {
+      "description": "The base enrollment object.",
       "type": "object",
+      "discriminator": "objectType",
+      "required": [
+        "objectType"
+      ],
       "properties": {
-        "capabilities": {
-          "$ref": "#/definitions/DeviceCapabilities",
-          "description": "Capabilities of the device"
-        },
-        "registrationId": {
-          "description": "The registration ID is alphanumeric, lowercase, and may contain hyphens.",
+        "objectType": {
+          "description": "The type of enrollment",
           "type": "string"
-        },
-        "deviceId": {
-          "description": "Desired IoT Hub device ID (optional).",
-          "type": "string"
-        },
-        "registrationState": {
-          "$ref": "#/definitions/DeviceRegistrationState",
-          "description": "Current registration status.",
-          "readOnly": true
         },
         "attestation": {
           "$ref": "#/definitions/AttestationMechanism",
@@ -714,6 +658,34 @@
         "customAllocationDefinition": {
           "$ref": "#/definitions/CustomAllocationDefinition",
           "description": "Custom allocation definition."
+        }
+      }
+    },
+    "IndividualEnrollment": {
+      "description": "The device enrollment record.",
+      "allOf": [{ "$ref": "#/definitions/Enrollment"}],
+      "required": [
+        "registrationId",
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "$ref": "#/definitions/DeviceCapabilities",
+          "description": "Capabilities of the device"
+        },
+        "registrationId": {
+          "description": "The registration ID is alphanumeric, lowercase, and may contain hyphens.",
+          "type": "string"
+        },
+        "deviceId": {
+          "description": "Desired IoT Hub device ID (optional).",
+          "type": "string"
+        },
+        "registrationState": {
+          "$ref": "#/definitions/DeviceRegistrationState",
+          "description": "Current registration status.",
+          "readOnly": true
         }
       }
     },
@@ -1020,6 +992,7 @@
     },
     "EnrollmentGroup": {
       "description": "Enrollment group record.",
+      "allOf": [{ "$ref": "#/definitions/Enrollment"}],
       "required": [
         "enrollmentGroupId",
         "attestation"
@@ -1029,73 +1002,11 @@
         "enrollmentGroupId": {
           "description": "Enrollment Group ID.",
           "type": "string"
-        },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanism",
-          "description": "Attestation method used by the device."
-        },
-        "iotHubHostName": {
-          "description": "The Iot Hub host name.",
-          "type": "string"
-        },
-        "initialTwin": {
-          "$ref": "#/definitions/InitialTwin",
-          "description": "Initial device twin."
-        },
-        "etag": {
-          "description": "The entity tag associated with the resource.",
-          "type": "string"
-        },
-        "provisioningStatus": {
-          "description": "The provisioning status.",
-          "default": "enabled",
-          "enum": [
-            "enabled",
-            "disabled"
-          ],
-          "type": "string"
-        },
-        "reprovisionPolicy": {
-          "$ref": "#/definitions/ReprovisionPolicy",
-          "description": "The behavior when a device is re-provisioned to an IoT hub."
-        },
-        "createdDateTimeUtc": {
-          "format": "date-time",
-          "description": "The DateTime this resource was created.",
-          "type": "string",
-          "readOnly": true
-        },
-        "lastUpdatedDateTimeUtc": {
-          "format": "date-time",
-          "description": "The DateTime this resource was last updated.",
-          "type": "string",
-          "readOnly": true
-        },
-        "allocationPolicy": {
-          "description": "The allocation policy of this resource. This policy overrides the tenant level allocation policy for this individual enrollment or enrollment group. Possible values include 'hashed': Linked IoT hubs are equally likely to have devices provisioned to them, 'geoLatency':  Devices are provisioned to an IoT hub with the lowest latency to the device.If multiple linked IoT hubs would provide the same lowest latency, the provisioning service hashes devices across those hubs, 'static' : Specification of the desired IoT hub in the enrollment list takes priority over the service-level allocation policy, 'custom': Devices are provisioned to an IoT hub based on your own custom logic. The provisioning service passes information about the device to the logic, and the logic returns the desired IoT hub as well as the desired initial configuration. We recommend using Azure Functions to host your logic.",
-          "enum": [
-            "hashed",
-            "geoLatency",
-            "static",
-            "custom"
-          ],
-          "type": "string"
-        },
-        "iotHubs": {
-          "description": "The list of names of IoT hubs the device(s) in this resource can be allocated to. Must be a subset of tenant level list of IoT hubs.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "customAllocationDefinition": {
-          "$ref": "#/definitions/CustomAllocationDefinition",
-          "description": "Custom allocation definition."
         }
       }
     },
-    "IndividualEnrollmentOperation": {
-      "description": "Individual Enrollment operation",
+    "EnrollmentOperation": {
+      "description": "Enrollment operation",
       "required": [
         "enrollments",
         "mode"
@@ -1106,34 +1017,7 @@
           "description": "Enrollment items",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/IndividualEnrollment"
-          }
-        },
-        "mode": {
-          "description": "Operation mode",
-          "enum": [
-            "create",
-            "update",
-            "updateIfMatchETag",
-            "delete"
-          ],
-          "type": "string"
-        }
-      }
-    },
-    "EnrollmentGroupOperation": {
-      "description": "Enrollment Group operation",
-      "required": [
-        "enrollments",
-        "mode"
-      ],
-      "type": "object",
-      "properties": {
-        "enrollments": {
-          "description": "Enrollment items",
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/EnrollmentGroup"
+            "$ref": "#/definitions/Enrollment"
           }
         },
         "mode": {

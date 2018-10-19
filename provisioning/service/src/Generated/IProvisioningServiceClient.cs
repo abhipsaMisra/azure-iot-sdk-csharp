@@ -142,10 +142,10 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         Task<HttpOperationResponse> DeleteDeviceRegistrationStateWithHttpMessagesAsync(string id, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Individual device enrollment operation.
+        /// Device enrollment operation.
         /// </summary>
-        /// <param name='individualEnrollmentOperation'>
-        /// Indovidual enrollment operation.
+        /// <param name='enrollmentOperation'>
+        /// Individual enrollment operation.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -153,21 +153,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<EnrollmentOperationResult>> RunIndividualEnrollmentOperationWithHttpMessagesAsync(IndividualEnrollmentOperation individualEnrollmentOperation, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Device enrollment group operation.
-        /// </summary>
-        /// <param name='enrollmentGroupOperation'>
-        /// Enrollment Group operation.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse<EnrollmentOperationResult>> RunEnrollmentGroupsOperationWithHttpMessagesAsync(EnrollmentGroupOperation enrollmentGroupOperation, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<EnrollmentOperationResult>> RunEnrollmentOperationWithHttpMessagesAsync(EnrollmentOperation enrollmentOperation, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Query the device enrollment records.

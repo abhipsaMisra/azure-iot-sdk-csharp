@@ -15,7 +15,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     /// <summary>
     /// The device enrollment record.
     /// </summary>
-    public partial class IndividualEnrollment
+    public partial class IndividualEnrollment : Enrollment
     {
         /// <summary>
         /// Initializes a new instance of the IndividualEnrollment class.
@@ -32,11 +32,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// lowercase, and may contain hyphens.</param>
         /// <param name="attestation">Attestation method used by the
         /// device.</param>
-        /// <param name="capabilities">Capabilities of the device</param>
-        /// <param name="deviceId">Desired IoT Hub device ID
-        /// (optional).</param>
-        /// <param name="registrationState">Current registration
-        /// status.</param>
         /// <param name="iotHubHostName">The Iot Hub host name.</param>
         /// <param name="initialTwin">Initial device twin.</param>
         /// <param name="etag">The entity tag associated with the
@@ -70,23 +65,18 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// level list of IoT hubs.</param>
         /// <param name="customAllocationDefinition">Custom allocation
         /// definition.</param>
-        public IndividualEnrollment(string registrationId, AttestationMechanism attestation, DeviceCapabilities capabilities = default(DeviceCapabilities), string deviceId = default(string), DeviceRegistrationState registrationState = default(DeviceRegistrationState), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
+        /// <param name="capabilities">Capabilities of the device</param>
+        /// <param name="deviceId">Desired IoT Hub device ID
+        /// (optional).</param>
+        /// <param name="registrationState">Current registration
+        /// status.</param>
+        public IndividualEnrollment(string registrationId, AttestationMechanism attestation = default(AttestationMechanism), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition), DeviceCapabilities capabilities = default(DeviceCapabilities), string deviceId = default(string), DeviceRegistrationState registrationState = default(DeviceRegistrationState))
+            : base(attestation, iotHubHostName, initialTwin, etag, provisioningStatus, reprovisionPolicy, createdDateTimeUtc, lastUpdatedDateTimeUtc, allocationPolicy, iotHubs, customAllocationDefinition)
         {
             Capabilities = capabilities;
             RegistrationId = registrationId;
             DeviceId = deviceId;
             RegistrationState = registrationState;
-            Attestation = attestation;
-            IotHubHostName = iotHubHostName;
-            InitialTwin = initialTwin;
-            Etag = etag;
-            ProvisioningStatus = provisioningStatus;
-            ReprovisionPolicy = reprovisionPolicy;
-            CreatedDateTimeUtc = createdDateTimeUtc;
-            LastUpdatedDateTimeUtc = lastUpdatedDateTimeUtc;
-            AllocationPolicy = allocationPolicy;
-            IotHubs = iotHubs;
-            CustomAllocationDefinition = customAllocationDefinition;
             CustomInit();
         }
 
@@ -121,121 +111,21 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         public DeviceRegistrationState RegistrationState { get; private set; }
 
         /// <summary>
-        /// Gets or sets attestation method used by the device.
-        /// </summary>
-        [JsonProperty(PropertyName = "attestation")]
-        public AttestationMechanism Attestation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Iot Hub host name.
-        /// </summary>
-        [JsonProperty(PropertyName = "iotHubHostName")]
-        public string IotHubHostName { get; set; }
-
-        /// <summary>
-        /// Gets or sets initial device twin.
-        /// </summary>
-        [JsonProperty(PropertyName = "initialTwin")]
-        public InitialTwin InitialTwin { get; set; }
-
-        /// <summary>
-        /// Gets or sets the entity tag associated with the resource.
-        /// </summary>
-        [JsonProperty(PropertyName = "etag")]
-        public string Etag { get; set; }
-
-        /// <summary>
-        /// Gets or sets the provisioning status. Possible values include:
-        /// 'enabled', 'disabled'
-        /// </summary>
-        [JsonProperty(PropertyName = "provisioningStatus")]
-        public string ProvisioningStatus { get; set; }
-
-        /// <summary>
-        /// Gets or sets the behavior when a device is re-provisioned to an IoT
-        /// hub.
-        /// </summary>
-        [JsonProperty(PropertyName = "reprovisionPolicy")]
-        public ReprovisionPolicy ReprovisionPolicy { get; set; }
-
-        /// <summary>
-        /// Gets the DateTime this resource was created.
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDateTimeUtc")]
-        public System.DateTime? CreatedDateTimeUtc { get; private set; }
-
-        /// <summary>
-        /// Gets the DateTime this resource was last updated.
-        /// </summary>
-        [JsonProperty(PropertyName = "lastUpdatedDateTimeUtc")]
-        public System.DateTime? LastUpdatedDateTimeUtc { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the allocation policy of this resource. This policy
-        /// overrides the tenant level allocation policy for this individual
-        /// enrollment or enrollment group. Possible values include 'hashed':
-        /// Linked IoT hubs are equally likely to have devices provisioned to
-        /// them, 'geoLatency':  Devices are provisioned to an IoT hub with the
-        /// lowest latency to the device.If multiple linked IoT hubs would
-        /// provide the same lowest latency, the provisioning service hashes
-        /// devices across those hubs, 'static' : Specification of the desired
-        /// IoT hub in the enrollment list takes priority over the
-        /// service-level allocation policy, 'custom': Devices are provisioned
-        /// to an IoT hub based on your own custom logic. The provisioning
-        /// service passes information about the device to the logic, and the
-        /// logic returns the desired IoT hub as well as the desired initial
-        /// configuration. We recommend using Azure Functions to host your
-        /// logic. Possible values include: 'hashed', 'geoLatency', 'static',
-        /// 'custom'
-        /// </summary>
-        [JsonProperty(PropertyName = "allocationPolicy")]
-        public string AllocationPolicy { get; set; }
-
-        /// <summary>
-        /// Gets or sets the list of names of IoT hubs the device(s) in this
-        /// resource can be allocated to. Must be a subset of tenant level list
-        /// of IoT hubs.
-        /// </summary>
-        [JsonProperty(PropertyName = "iotHubs")]
-        public IList<string> IotHubs { get; set; }
-
-        /// <summary>
-        /// Gets or sets custom allocation definition.
-        /// </summary>
-        [JsonProperty(PropertyName = "customAllocationDefinition")]
-        public CustomAllocationDefinition CustomAllocationDefinition { get; set; }
-
-        /// <summary>
         /// Validate the object.
         /// </summary>
         /// <exception cref="ValidationException">
         /// Thrown if validation fails
         /// </exception>
-        public virtual void Validate()
+        public override void Validate()
         {
+            base.Validate();
             if (RegistrationId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "RegistrationId");
             }
-            if (Attestation == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Attestation");
-            }
             if (Capabilities != null)
             {
                 Capabilities.Validate();
-            }
-            if (Attestation != null)
-            {
-                Attestation.Validate();
-            }
-            if (ReprovisionPolicy != null)
-            {
-                ReprovisionPolicy.Validate();
-            }
-            if (CustomAllocationDefinition != null)
-            {
-                CustomAllocationDefinition.Validate();
             }
         }
     }

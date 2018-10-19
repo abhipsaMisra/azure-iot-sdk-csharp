@@ -13,27 +13,25 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     using System.Linq;
 
     /// <summary>
-    /// Individual Enrollment operation
+    /// Enrollment operation
     /// </summary>
-    public partial class IndividualEnrollmentOperation
+    public partial class EnrollmentOperation
     {
         /// <summary>
-        /// Initializes a new instance of the IndividualEnrollmentOperation
-        /// class.
+        /// Initializes a new instance of the EnrollmentOperation class.
         /// </summary>
-        public IndividualEnrollmentOperation()
+        public EnrollmentOperation()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the IndividualEnrollmentOperation
-        /// class.
+        /// Initializes a new instance of the EnrollmentOperation class.
         /// </summary>
         /// <param name="enrollments">Enrollment items</param>
         /// <param name="mode">Operation mode. Possible values include:
         /// 'create', 'update', 'updateIfMatchETag', 'delete'</param>
-        public IndividualEnrollmentOperation(IList<IndividualEnrollment> enrollments, string mode)
+        public EnrollmentOperation(IList<Enrollment> enrollments, string mode)
         {
             Enrollments = enrollments;
             Mode = mode;
@@ -49,7 +47,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// Gets or sets enrollment items
         /// </summary>
         [JsonProperty(PropertyName = "enrollments")]
-        public IList<IndividualEnrollment> Enrollments { get; set; }
+        public IList<Enrollment> Enrollments { get; set; }
 
         /// <summary>
         /// Gets or sets operation mode. Possible values include: 'create',
