@@ -15,18 +15,20 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     /// <summary>
     /// The device enrollment record.
     /// </summary>
-    public partial class IndividualEnrollment
+    public partial class IndividualEnrollmentRequest
     {
         /// <summary>
-        /// Initializes a new instance of the IndividualEnrollment class.
+        /// Initializes a new instance of the IndividualEnrollmentRequest
+        /// class.
         /// </summary>
-        public IndividualEnrollment()
+        public IndividualEnrollmentRequest()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the IndividualEnrollment class.
+        /// Initializes a new instance of the IndividualEnrollmentRequest
+        /// class.
         /// </summary>
         /// <param name="registrationId">The registration ID is alphanumeric,
         /// lowercase, and may contain hyphens.</param>
@@ -39,16 +41,10 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// status.</param>
         /// <param name="iotHubHostName">The Iot Hub host name.</param>
         /// <param name="initialTwin">Initial device twin.</param>
-        /// <param name="etag">The entity tag associated with the
-        /// resource.</param>
         /// <param name="provisioningStatus">The provisioning status. Possible
         /// values include: 'enabled', 'disabled'</param>
         /// <param name="reprovisionPolicy">The behavior when a device is
         /// re-provisioned to an IoT hub.</param>
-        /// <param name="createdDateTimeUtc">The DateTime this resource was
-        /// created.</param>
-        /// <param name="lastUpdatedDateTimeUtc">The DateTime this resource was
-        /// last updated.</param>
         /// <param name="allocationPolicy">The allocation policy of this
         /// resource. This policy overrides the tenant level allocation policy
         /// for this individual enrollment or enrollment group. Possible values
@@ -70,7 +66,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// level list of IoT hubs.</param>
         /// <param name="customAllocationDefinition">Custom allocation
         /// definition.</param>
-        public IndividualEnrollment(string registrationId, AttestationMechanism attestation, DeviceCapabilities capabilities = default(DeviceCapabilities), string deviceId = default(string), DeviceRegistrationState registrationState = default(DeviceRegistrationState), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
+        public IndividualEnrollmentRequest(string registrationId, AttestationMechanismRequest attestation, DeviceCapabilities capabilities = default(DeviceCapabilities), string deviceId = default(string), DeviceRegistrationState registrationState = default(DeviceRegistrationState), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
         {
             Capabilities = capabilities;
             RegistrationId = registrationId;
@@ -79,11 +75,8 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
             Attestation = attestation;
             IotHubHostName = iotHubHostName;
             InitialTwin = initialTwin;
-            Etag = etag;
             ProvisioningStatus = provisioningStatus;
             ReprovisionPolicy = reprovisionPolicy;
-            CreatedDateTimeUtc = createdDateTimeUtc;
-            LastUpdatedDateTimeUtc = lastUpdatedDateTimeUtc;
             AllocationPolicy = allocationPolicy;
             IotHubs = iotHubs;
             CustomAllocationDefinition = customAllocationDefinition;
@@ -124,7 +117,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// Gets or sets attestation method used by the device.
         /// </summary>
         [JsonProperty(PropertyName = "attestation")]
-        public AttestationMechanism Attestation { get; set; }
+        public AttestationMechanismRequest Attestation { get; set; }
 
         /// <summary>
         /// Gets or sets the Iot Hub host name.
@@ -139,12 +132,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         public InitialTwin InitialTwin { get; set; }
 
         /// <summary>
-        /// Gets or sets the entity tag associated with the resource.
-        /// </summary>
-        [JsonProperty(PropertyName = "etag")]
-        public string Etag { get; set; }
-
-        /// <summary>
         /// Gets or sets the provisioning status. Possible values include:
         /// 'enabled', 'disabled'
         /// </summary>
@@ -157,18 +144,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// </summary>
         [JsonProperty(PropertyName = "reprovisionPolicy")]
         public ReprovisionPolicy ReprovisionPolicy { get; set; }
-
-        /// <summary>
-        /// Gets the DateTime this resource was created.
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDateTimeUtc")]
-        public System.DateTime? CreatedDateTimeUtc { get; private set; }
-
-        /// <summary>
-        /// Gets the DateTime this resource was last updated.
-        /// </summary>
-        [JsonProperty(PropertyName = "lastUpdatedDateTimeUtc")]
-        public System.DateTime? LastUpdatedDateTimeUtc { get; private set; }
 
         /// <summary>
         /// Gets or sets the allocation policy of this resource. This policy

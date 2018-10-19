@@ -12,20 +12,22 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     /// <summary>
     /// Certificate and Certificate info
     /// </summary>
-    public partial class X509CertificateWithInfo
+    public partial class X509CertificateWithInfoResponse
     {
         /// <summary>
-        /// Initializes a new instance of the X509CertificateWithInfo class.
+        /// Initializes a new instance of the X509CertificateWithInfoResponse
+        /// class.
         /// </summary>
-        public X509CertificateWithInfo()
+        public X509CertificateWithInfoResponse()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the X509CertificateWithInfo class.
+        /// Initializes a new instance of the X509CertificateWithInfoResponse
+        /// class.
         /// </summary>
-        public X509CertificateWithInfo(string certificate = default(string), X509CertificateInfo info = default(X509CertificateInfo))
+        public X509CertificateWithInfoResponse(string certificate = default(string), X509CertificateInfo info = default(X509CertificateInfo))
         {
             Certificate = certificate;
             Info = info;

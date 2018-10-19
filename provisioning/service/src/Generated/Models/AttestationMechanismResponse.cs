@@ -14,18 +14,20 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     /// Attestation mechanism for individualEnrollment as well as
     /// enrollmentGroup
     /// </summary>
-    public partial class AttestationMechanism
+    public partial class AttestationMechanismResponse
     {
         /// <summary>
-        /// Initializes a new instance of the AttestationMechanism class.
+        /// Initializes a new instance of the AttestationMechanismResponse
+        /// class.
         /// </summary>
-        public AttestationMechanism()
+        public AttestationMechanismResponse()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the AttestationMechanism class.
+        /// Initializes a new instance of the AttestationMechanismResponse
+        /// class.
         /// </summary>
         /// <param name="type">Attestation Type. Possible values include:
         /// 'none', 'tpm', 'x509', 'symmetricKey'</param>
@@ -33,7 +35,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// <param name="x509">X509 attestation method.</param>
         /// <param name="symmetricKey">Symmetric Key attestation
         /// method.</param>
-        public AttestationMechanism(string type, TpmAttestation tpm = default(TpmAttestation), X509Attestation x509 = default(X509Attestation), SymmetricKeyAttestation symmetricKey = default(SymmetricKeyAttestation))
+        public AttestationMechanismResponse(string type, TpmAttestation tpm = default(TpmAttestation), X509AttestationResponse x509 = default(X509AttestationResponse), SymmetricKeyAttestation symmetricKey = default(SymmetricKeyAttestation))
         {
             Type = type;
             Tpm = tpm;
@@ -64,7 +66,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// Gets or sets X509 attestation method.
         /// </summary>
         [JsonProperty(PropertyName = "x509")]
-        public X509Attestation X509 { get; set; }
+        public X509AttestationResponse X509 { get; set; }
 
         /// <summary>
         /// Gets or sets symmetric Key attestation method.

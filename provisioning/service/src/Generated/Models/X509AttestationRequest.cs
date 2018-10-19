@@ -12,20 +12,20 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     /// <summary>
     /// Attestation via X509.
     /// </summary>
-    public partial class X509Attestation
+    public partial class X509AttestationRequest
     {
         /// <summary>
-        /// Initializes a new instance of the X509Attestation class.
+        /// Initializes a new instance of the X509AttestationRequest class.
         /// </summary>
-        public X509Attestation()
+        public X509AttestationRequest()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the X509Attestation class.
+        /// Initializes a new instance of the X509AttestationRequest class.
         /// </summary>
-        public X509Attestation(X509Certificates clientCertificates = default(X509Certificates), X509Certificates signingCertificates = default(X509Certificates), X509CAReferences caReferences = default(X509CAReferences))
+        public X509AttestationRequest(X509CertificatesRequest clientCertificates = default(X509CertificatesRequest), X509CertificatesRequest signingCertificates = default(X509CertificatesRequest), X509CAReferences caReferences = default(X509CAReferences))
         {
             ClientCertificates = clientCertificates;
             SigningCertificates = signingCertificates;
@@ -41,34 +41,17 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "clientCertificates")]
-        public X509Certificates ClientCertificates { get; set; }
+        public X509CertificatesRequest ClientCertificates { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "signingCertificates")]
-        public X509Certificates SigningCertificates { get; set; }
+        public X509CertificatesRequest SigningCertificates { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "caReferences")]
         public X509CAReferences CaReferences { get; set; }
 
-        /// <summary>
-        /// Validate the object.
-        /// </summary>
-        /// <exception cref="Rest.ValidationException">
-        /// Thrown if validation fails
-        /// </exception>
-        public virtual void Validate()
-        {
-            if (ClientCertificates != null)
-            {
-                ClientCertificates.Validate();
-            }
-            if (SigningCertificates != null)
-            {
-                SigningCertificates.Validate();
-            }
-        }
     }
 }

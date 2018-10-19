@@ -12,20 +12,20 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
     /// <summary>
     /// Primary and secondary certificates
     /// </summary>
-    public partial class X509Certificates
+    public partial class X509CertificatesResponse
     {
         /// <summary>
-        /// Initializes a new instance of the X509Certificates class.
+        /// Initializes a new instance of the X509CertificatesResponse class.
         /// </summary>
-        public X509Certificates()
+        public X509CertificatesResponse()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the X509Certificates class.
+        /// Initializes a new instance of the X509CertificatesResponse class.
         /// </summary>
-        public X509Certificates(X509CertificateWithInfo primary = default(X509CertificateWithInfo), X509CertificateWithInfo secondary = default(X509CertificateWithInfo))
+        public X509CertificatesResponse(X509CertificateWithInfoResponse primary = default(X509CertificateWithInfoResponse), X509CertificateWithInfoResponse secondary = default(X509CertificateWithInfoResponse))
         {
             Primary = primary;
             Secondary = secondary;
@@ -40,12 +40,12 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "primary")]
-        public X509CertificateWithInfo Primary { get; set; }
+        public X509CertificateWithInfoResponse Primary { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "secondary")]
-        public X509CertificateWithInfo Secondary { get; set; }
+        public X509CertificateWithInfoResponse Secondary { get; set; }
 
         /// <summary>
         /// Validate the object.

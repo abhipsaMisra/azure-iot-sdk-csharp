@@ -33,7 +33,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// <param name="enrollments">Enrollment items</param>
         /// <param name="mode">Operation mode. Possible values include:
         /// 'create', 'update', 'updateIfMatchETag', 'delete'</param>
-        public IndividualEnrollmentOperation(IList<IndividualEnrollment> enrollments, string mode)
+        public IndividualEnrollmentOperation(IList<IndividualEnrollmentRequest> enrollments, string mode)
         {
             Enrollments = enrollments;
             Mode = mode;
@@ -49,7 +49,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// Gets or sets enrollment items
         /// </summary>
         [JsonProperty(PropertyName = "enrollments")]
-        public IList<IndividualEnrollment> Enrollments { get; set; }
+        public IList<IndividualEnrollmentRequest> Enrollments { get; set; }
 
         /// <summary>
         /// Gets or sets operation mode. Possible values include: 'create',

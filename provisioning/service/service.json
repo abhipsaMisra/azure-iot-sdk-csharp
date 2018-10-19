@@ -37,7 +37,7 @@
           "200": {
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/IndividualEnrollment"
+              "$ref": "#/definitions/IndividualEnrollmentResponse"
             }
           },
           "default": {
@@ -115,7 +115,7 @@
           "200": {
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/EnrollmentGroup"
+              "$ref": "#/definitions/EnrollmentGroupResponse"
             }
           },
           "default": {
@@ -378,7 +378,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/IndividualEnrollment"
+                "$ref": "#/definitions/IndividualEnrollmentResponse"
               }
             },
             "headers": {
@@ -432,7 +432,7 @@
           "200": {
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/AttestationMechanism"
+              "$ref": "#/definitions/AttestationMechanismResponse"
             }
           },
           "default": {
@@ -492,7 +492,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/EnrollmentGroup"
+                "$ref": "#/definitions/EnrollmentGroupResponse"
               }
             },
             "headers": {
@@ -546,7 +546,7 @@
           "200": {
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/AttestationMechanism"
+              "$ref": "#/definitions/AttestationMechanismResponse"
             }
           },
           "default": {
@@ -628,7 +628,7 @@
         }
       }
     },
-    "IndividualEnrollment": {
+    "IndividualEnrollmentRequest": {
       "description": "The device enrollment record.",
       "required": [
         "registrationId",
@@ -654,7 +654,80 @@
           "readOnly": true
         },
         "attestation": {
-          "$ref": "#/definitions/AttestationMechanism",
+          "$ref": "#/definitions/AttestationMechanismRequest",
+          "description": "Attestation method used by the device."
+        },
+        "iotHubHostName": {
+          "description": "The Iot Hub host name.",
+          "type": "string"
+        },
+        "initialTwin": {
+          "$ref": "#/definitions/InitialTwin",
+          "description": "Initial device twin."
+        },
+        "provisioningStatus": {
+          "description": "The provisioning status.",
+          "default": "enabled",
+          "enum": [
+            "enabled",
+            "disabled"
+          ],
+          "type": "string"
+        },
+        "reprovisionPolicy": {
+          "$ref": "#/definitions/ReprovisionPolicy",
+          "description": "The behavior when a device is re-provisioned to an IoT hub."
+        },
+        "allocationPolicy": {
+          "description": "The allocation policy of this resource. This policy overrides the tenant level allocation policy for this individual enrollment or enrollment group. Possible values include 'hashed': Linked IoT hubs are equally likely to have devices provisioned to them, 'geoLatency':  Devices are provisioned to an IoT hub with the lowest latency to the device.If multiple linked IoT hubs would provide the same lowest latency, the provisioning service hashes devices across those hubs, 'static' : Specification of the desired IoT hub in the enrollment list takes priority over the service-level allocation policy, 'custom': Devices are provisioned to an IoT hub based on your own custom logic. The provisioning service passes information about the device to the logic, and the logic returns the desired IoT hub as well as the desired initial configuration. We recommend using Azure Functions to host your logic.",
+          "enum": [
+            "hashed",
+            "geoLatency",
+            "static",
+            "custom"
+          ],
+          "type": "string"
+        },
+        "iotHubs": {
+          "description": "The list of names of IoT hubs the device(s) in this resource can be allocated to. Must be a subset of tenant level list of IoT hubs.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "customAllocationDefinition": {
+          "$ref": "#/definitions/CustomAllocationDefinition",
+          "description": "Custom allocation definition."
+        }
+      }
+    },
+    "IndividualEnrollmentResponse": {
+      "description": "The device enrollment record.",
+      "required": [
+        "registrationId",
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "$ref": "#/definitions/DeviceCapabilities",
+          "description": "Capabilities of the device"
+        },
+        "registrationId": {
+          "description": "The registration ID is alphanumeric, lowercase, and may contain hyphens.",
+          "type": "string"
+        },
+        "deviceId": {
+          "description": "Desired IoT Hub device ID (optional).",
+          "type": "string"
+        },
+        "registrationState": {
+          "$ref": "#/definitions/DeviceRegistrationState",
+          "description": "Current registration status.",
+          "readOnly": true
+        },
+        "attestation": {
+          "$ref": "#/definitions/AttestationMechanismResponse",
           "description": "Attestation method used by the device."
         },
         "iotHubHostName": {
@@ -802,7 +875,7 @@
         }
       }
     },
-    "AttestationMechanism": {
+    "AttestationMechanismRequest": {
       "description": "Attestation mechanism for individualEnrollment as well as enrollmentGroup",
       "required": [
         "type"
@@ -824,7 +897,38 @@
           "description": "TPM attestation method."
         },
         "x509": {
-          "$ref": "#/definitions/X509Attestation",
+          "$ref": "#/definitions/X509AttestationRequest",
+          "description": "X509 attestation method."
+        },
+        "symmetricKey": {
+          "$ref": "#/definitions/SymmetricKeyAttestation",
+          "description": "Symmetric Key attestation method."
+        }
+      }
+    },
+    "AttestationMechanismResponse": {
+      "description": "Attestation mechanism for individualEnrollment as well as enrollmentGroup",
+      "required": [
+        "type"
+      ],
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "Attestation Type.",
+          "enum": [
+            "none",
+            "tpm",
+            "x509",
+            "symmetricKey"
+          ],
+          "type": "string"
+        },
+        "tpm": {
+          "$ref": "#/definitions/TpmAttestation",
+          "description": "TPM attestation method."
+        },
+        "x509": {
+          "$ref": "#/definitions/X509AttestationResponse",
           "description": "X509 attestation method."
         },
         "symmetricKey": {
@@ -900,15 +1004,30 @@
         }
       }
     },
-    "X509Attestation": {
+    "X509AttestationRequest": {
       "description": "Attestation via X509.",
       "type": "object",
       "properties": {
         "clientCertificates": {
-          "$ref": "#/definitions/X509Certificates"
+          "$ref": "#/definitions/X509CertificatesRequest"
         },
         "signingCertificates": {
-          "$ref": "#/definitions/X509Certificates"
+          "$ref": "#/definitions/X509CertificatesRequest"
+        },
+        "caReferences": {
+          "$ref": "#/definitions/X509CAReferences"
+        }
+      }
+    },
+    "X509AttestationResponse": {
+      "description": "Attestation via X509.",
+      "type": "object",
+      "properties": {
+        "clientCertificates": {
+          "$ref": "#/definitions/X509CertificatesResponse"
+        },
+        "signingCertificates": {
+          "$ref": "#/definitions/X509CertificatesResponse"
         },
         "caReferences": {
           "$ref": "#/definitions/X509CAReferences"
@@ -939,15 +1058,27 @@
         }
       }
     },
-    "X509Certificates": {
+    "X509CertificatesRequest": {
       "description": "Primary and secondary certificates",
       "type": "object",
       "properties": {
         "primary": {
-          "$ref": "#/definitions/X509CertificateWithInfo"
+          "$ref": "#/definitions/X509CertificateWithInfoRequest"
         },
         "secondary": {
-          "$ref": "#/definitions/X509CertificateWithInfo"
+          "$ref": "#/definitions/X509CertificateWithInfoRequest"
+        }
+      }
+    },
+    "X509CertificatesResponse": {
+      "description": "Primary and secondary certificates",
+      "type": "object",
+      "properties": {
+        "primary": {
+          "$ref": "#/definitions/X509CertificateWithInfoResponse"
+        },
+        "secondary": {
+          "$ref": "#/definitions/X509CertificateWithInfoResponse"
         }
       }
     },
@@ -963,7 +1094,16 @@
         }
       }
     },
-    "X509CertificateWithInfo": {
+    "X509CertificateWithInfoRequest": {
+      "description": "Certificate and Certificate info",
+      "type": "object",
+      "properties": {
+        "certificate": {
+          "type": "string"
+        }
+      }
+    },
+    "X509CertificateWithInfoResponse": {
       "description": "Certificate and Certificate info",
       "type": "object",
       "properties": {
@@ -1018,7 +1158,7 @@
         }
       }
     },
-    "EnrollmentGroup": {
+    "EnrollmentGroupRequest": {
       "description": "Enrollment group record.",
       "required": [
         "enrollmentGroupId",
@@ -1031,7 +1171,83 @@
           "type": "string"
         },
         "attestation": {
-          "$ref": "#/definitions/AttestationMechanism",
+          "$ref": "#/definitions/AttestationMechanismRequest",
+          "description": "Attestation method used by the device."
+        },
+        "iotHubHostName": {
+          "description": "The Iot Hub host name.",
+          "type": "string"
+        },
+        "initialTwin": {
+          "$ref": "#/definitions/InitialTwin",
+          "description": "Initial device twin."
+        },
+        "etag": {
+          "description": "The entity tag associated with the resource.",
+          "type": "string"
+        },
+        "provisioningStatus": {
+          "description": "The provisioning status.",
+          "default": "enabled",
+          "enum": [
+            "enabled",
+            "disabled"
+          ],
+          "type": "string"
+        },
+        "reprovisionPolicy": {
+          "$ref": "#/definitions/ReprovisionPolicy",
+          "description": "The behavior when a device is re-provisioned to an IoT hub."
+        },
+        "createdDateTimeUtc": {
+          "format": "date-time",
+          "description": "The DateTime this resource was created.",
+          "type": "string",
+          "readOnly": true
+        },
+        "lastUpdatedDateTimeUtc": {
+          "format": "date-time",
+          "description": "The DateTime this resource was last updated.",
+          "type": "string",
+          "readOnly": true
+        },
+        "allocationPolicy": {
+          "description": "The allocation policy of this resource. This policy overrides the tenant level allocation policy for this individual enrollment or enrollment group. Possible values include 'hashed': Linked IoT hubs are equally likely to have devices provisioned to them, 'geoLatency':  Devices are provisioned to an IoT hub with the lowest latency to the device.If multiple linked IoT hubs would provide the same lowest latency, the provisioning service hashes devices across those hubs, 'static' : Specification of the desired IoT hub in the enrollment list takes priority over the service-level allocation policy, 'custom': Devices are provisioned to an IoT hub based on your own custom logic. The provisioning service passes information about the device to the logic, and the logic returns the desired IoT hub as well as the desired initial configuration. We recommend using Azure Functions to host your logic.",
+          "enum": [
+            "hashed",
+            "geoLatency",
+            "static",
+            "custom"
+          ],
+          "type": "string"
+        },
+        "iotHubs": {
+          "description": "The list of names of IoT hubs the device(s) in this resource can be allocated to. Must be a subset of tenant level list of IoT hubs.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "customAllocationDefinition": {
+          "$ref": "#/definitions/CustomAllocationDefinition",
+          "description": "Custom allocation definition."
+        }
+      }
+    },
+    "EnrollmentGroupResponse": {
+      "description": "Enrollment group record.",
+      "required": [
+        "enrollmentGroupId",
+        "attestation"
+      ],
+      "type": "object",
+      "properties": {
+        "enrollmentGroupId": {
+          "description": "Enrollment Group ID.",
+          "type": "string"
+        },
+        "attestation": {
+          "$ref": "#/definitions/AttestationMechanismResponse",
           "description": "Attestation method used by the device."
         },
         "iotHubHostName": {
@@ -1106,7 +1322,7 @@
           "description": "Enrollment items",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/IndividualEnrollment"
+            "$ref": "#/definitions/IndividualEnrollmentRequest"
           }
         },
         "mode": {
@@ -1133,7 +1349,7 @@
           "description": "Enrollment items",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/EnrollmentGroup"
+            "$ref": "#/definitions/EnrollmentGroupRequest"
           }
         },
         "mode": {

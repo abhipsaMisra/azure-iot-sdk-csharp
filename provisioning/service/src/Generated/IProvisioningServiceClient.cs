@@ -60,7 +60,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IndividualEnrollment>> GetIndividualEnrollmentWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IndividualEnrollmentResponse>> GetIndividualEnrollmentWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete a device enrollment record.
@@ -91,7 +91,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<EnrollmentGroup>> GetEnrollmentGroupWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<EnrollmentGroupResponse>> GetEnrollmentGroupWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete a device enrollment group.
@@ -187,7 +187,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<IndividualEnrollment>,QueryIndividualEnrollmentsHeaders>> QueryIndividualEnrollmentsWithHttpMessagesAsync(QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<IndividualEnrollmentResponse>,QueryIndividualEnrollmentsHeaders>> QueryIndividualEnrollmentsWithHttpMessagesAsync(QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get the attestation mechanism in the device enrollment record
@@ -201,7 +201,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<AttestationMechanism>> GetIndividualEnrollmentAttestationMechanismWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<AttestationMechanismResponse>> GetIndividualEnrollmentAttestationMechanismWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Query the device enrollment groups.
@@ -221,7 +221,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<EnrollmentGroup>,QueryEnrollmentGroupsHeaders>> QueryEnrollmentGroupsWithHttpMessagesAsync(QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<EnrollmentGroupResponse>,QueryEnrollmentGroupsHeaders>> QueryEnrollmentGroupsWithHttpMessagesAsync(QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get the attestation mechanism in the device enrollment group record
@@ -235,7 +235,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<AttestationMechanism>> GetEnrollmentGroupAttestationMechanismWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<AttestationMechanismResponse>> GetEnrollmentGroupAttestationMechanismWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the registration state of devices in this enrollmentGroup.

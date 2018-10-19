@@ -346,7 +346,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IndividualEnrollment>> GetIndividualEnrollmentWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IndividualEnrollmentResponse>> GetIndividualEnrollmentWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -452,7 +452,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IndividualEnrollment>();
+            var _result = new HttpOperationResponse<IndividualEnrollmentResponse>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -461,7 +461,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IndividualEnrollment>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IndividualEnrollmentResponse>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -659,7 +659,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<EnrollmentGroup>> GetEnrollmentGroupWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<EnrollmentGroupResponse>> GetEnrollmentGroupWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -765,7 +765,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<EnrollmentGroup>();
+            var _result = new HttpOperationResponse<EnrollmentGroupResponse>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -774,7 +774,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<EnrollmentGroup>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<EnrollmentGroupResponse>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1631,7 +1631,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<IndividualEnrollment>,QueryIndividualEnrollmentsHeaders>> QueryIndividualEnrollmentsWithHttpMessagesAsync(QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<IndividualEnrollmentResponse>,QueryIndividualEnrollmentsHeaders>> QueryIndividualEnrollmentsWithHttpMessagesAsync(QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (querySpecification == null)
             {
@@ -1764,7 +1764,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<IndividualEnrollment>,QueryIndividualEnrollmentsHeaders>();
+            var _result = new HttpOperationResponse<IList<IndividualEnrollmentResponse>,QueryIndividualEnrollmentsHeaders>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1773,7 +1773,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<IndividualEnrollment>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<IndividualEnrollmentResponse>>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1832,7 +1832,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<AttestationMechanism>> GetIndividualEnrollmentAttestationMechanismWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<AttestationMechanismResponse>> GetIndividualEnrollmentAttestationMechanismWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -1938,7 +1938,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<AttestationMechanism>();
+            var _result = new HttpOperationResponse<AttestationMechanismResponse>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1947,7 +1947,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<AttestationMechanism>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<AttestationMechanismResponse>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1999,7 +1999,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<EnrollmentGroup>,QueryEnrollmentGroupsHeaders>> QueryEnrollmentGroupsWithHttpMessagesAsync(QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<EnrollmentGroupResponse>,QueryEnrollmentGroupsHeaders>> QueryEnrollmentGroupsWithHttpMessagesAsync(QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (querySpecification == null)
             {
@@ -2132,7 +2132,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<EnrollmentGroup>,QueryEnrollmentGroupsHeaders>();
+            var _result = new HttpOperationResponse<IList<EnrollmentGroupResponse>,QueryEnrollmentGroupsHeaders>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -2141,7 +2141,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<EnrollmentGroup>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<EnrollmentGroupResponse>>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -2200,7 +2200,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<AttestationMechanism>> GetEnrollmentGroupAttestationMechanismWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<AttestationMechanismResponse>> GetEnrollmentGroupAttestationMechanismWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -2306,7 +2306,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<AttestationMechanism>();
+            var _result = new HttpOperationResponse<AttestationMechanismResponse>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -2315,7 +2315,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<AttestationMechanism>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<AttestationMechanismResponse>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {

@@ -29,7 +29,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IndividualEnrollment> GetIndividualEnrollmentAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IndividualEnrollmentResponse> GetIndividualEnrollmentAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetIndividualEnrollmentWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -69,7 +69,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<EnrollmentGroup> GetEnrollmentGroupAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<EnrollmentGroupResponse> GetEnrollmentGroupAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetEnrollmentGroupWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -195,7 +195,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<IndividualEnrollment>> QueryIndividualEnrollmentsAsync(this IProvisioningServiceClient operations, QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<IndividualEnrollmentResponse>> QueryIndividualEnrollmentsAsync(this IProvisioningServiceClient operations, QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.QueryIndividualEnrollmentsWithHttpMessagesAsync(querySpecification, xMsMaxItemCount, xMsContinuation, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -215,7 +215,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<AttestationMechanism> GetIndividualEnrollmentAttestationMechanismAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<AttestationMechanismResponse> GetIndividualEnrollmentAttestationMechanismAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetIndividualEnrollmentAttestationMechanismWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -241,7 +241,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<EnrollmentGroup>> QueryEnrollmentGroupsAsync(this IProvisioningServiceClient operations, QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<EnrollmentGroupResponse>> QueryEnrollmentGroupsAsync(this IProvisioningServiceClient operations, QuerySpecification querySpecification, int? xMsMaxItemCount = default(int?), string xMsContinuation = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.QueryEnrollmentGroupsWithHttpMessagesAsync(querySpecification, xMsMaxItemCount, xMsContinuation, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -261,7 +261,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<AttestationMechanism> GetEnrollmentGroupAttestationMechanismAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<AttestationMechanismResponse> GetEnrollmentGroupAttestationMechanismAsync(this IProvisioningServiceClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetEnrollmentGroupAttestationMechanismWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
