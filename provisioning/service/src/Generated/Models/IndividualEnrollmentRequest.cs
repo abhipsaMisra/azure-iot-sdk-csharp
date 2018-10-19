@@ -41,6 +41,8 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// status.</param>
         /// <param name="iotHubHostName">The Iot Hub host name.</param>
         /// <param name="initialTwin">Initial device twin.</param>
+        /// <param name="etag">The entity tag associated with the
+        /// resource.</param>
         /// <param name="provisioningStatus">The provisioning status. Possible
         /// values include: 'enabled', 'disabled'</param>
         /// <param name="reprovisionPolicy">The behavior when a device is
@@ -66,7 +68,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// level list of IoT hubs.</param>
         /// <param name="customAllocationDefinition">Custom allocation
         /// definition.</param>
-        public IndividualEnrollmentRequest(string registrationId, AttestationMechanismRequest attestation, DeviceCapabilities capabilities = default(DeviceCapabilities), string deviceId = default(string), DeviceRegistrationState registrationState = default(DeviceRegistrationState), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
+        public IndividualEnrollmentRequest(string registrationId, AttestationMechanismRequest attestation, DeviceCapabilities capabilities = default(DeviceCapabilities), string deviceId = default(string), DeviceRegistrationState registrationState = default(DeviceRegistrationState), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
         {
             Capabilities = capabilities;
             RegistrationId = registrationId;
@@ -75,6 +77,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
             Attestation = attestation;
             IotHubHostName = iotHubHostName;
             InitialTwin = initialTwin;
+            Etag = etag;
             ProvisioningStatus = provisioningStatus;
             ReprovisionPolicy = reprovisionPolicy;
             AllocationPolicy = allocationPolicy;
@@ -130,6 +133,12 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// </summary>
         [JsonProperty(PropertyName = "initialTwin")]
         public InitialTwin InitialTwin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entity tag associated with the resource.
+        /// </summary>
+        [JsonProperty(PropertyName = "etag")]
+        public string Etag { get; set; }
 
         /// <summary>
         /// Gets or sets the provisioning status. Possible values include:

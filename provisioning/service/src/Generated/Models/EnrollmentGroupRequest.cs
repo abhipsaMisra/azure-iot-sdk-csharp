@@ -39,10 +39,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// values include: 'enabled', 'disabled'</param>
         /// <param name="reprovisionPolicy">The behavior when a device is
         /// re-provisioned to an IoT hub.</param>
-        /// <param name="createdDateTimeUtc">The DateTime this resource was
-        /// created.</param>
-        /// <param name="lastUpdatedDateTimeUtc">The DateTime this resource was
-        /// last updated.</param>
         /// <param name="allocationPolicy">The allocation policy of this
         /// resource. This policy overrides the tenant level allocation policy
         /// for this individual enrollment or enrollment group. Possible values
@@ -64,7 +60,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// level list of IoT hubs.</param>
         /// <param name="customAllocationDefinition">Custom allocation
         /// definition.</param>
-        public EnrollmentGroupRequest(string enrollmentGroupId, AttestationMechanismRequest attestation, string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
+        public EnrollmentGroupRequest(string enrollmentGroupId, AttestationMechanismRequest attestation, string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
         {
             EnrollmentGroupId = enrollmentGroupId;
             Attestation = attestation;
@@ -73,8 +69,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
             Etag = etag;
             ProvisioningStatus = provisioningStatus;
             ReprovisionPolicy = reprovisionPolicy;
-            CreatedDateTimeUtc = createdDateTimeUtc;
-            LastUpdatedDateTimeUtc = lastUpdatedDateTimeUtc;
             AllocationPolicy = allocationPolicy;
             IotHubs = iotHubs;
             CustomAllocationDefinition = customAllocationDefinition;
@@ -129,18 +123,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// </summary>
         [JsonProperty(PropertyName = "reprovisionPolicy")]
         public ReprovisionPolicy ReprovisionPolicy { get; set; }
-
-        /// <summary>
-        /// Gets the DateTime this resource was created.
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDateTimeUtc")]
-        public System.DateTime? CreatedDateTimeUtc { get; private set; }
-
-        /// <summary>
-        /// Gets the DateTime this resource was last updated.
-        /// </summary>
-        [JsonProperty(PropertyName = "lastUpdatedDateTimeUtc")]
-        public System.DateTime? LastUpdatedDateTimeUtc { get; private set; }
 
         /// <summary>
         /// Gets or sets the allocation policy of this resource. This policy
