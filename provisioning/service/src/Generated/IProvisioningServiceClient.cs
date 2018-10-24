@@ -63,27 +63,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
         Task<HttpOperationResponse<IndividualEnrollment>> GetIndividualEnrollmentWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Create or update a device enrollment record.
-        /// </summary>
-        /// <param name='id'>
-        /// The registration ID is alphanumeric, lowercase, and may contain
-        /// hyphens.
-        /// </param>
-        /// <param name='enrollment'>
-        /// The device enrollment record.
-        /// </param>
-        /// <param name='ifMatch'>
-        /// The ETag of the enrollment record.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse<IndividualEnrollment>> CreateOrUpdateIndividualEnrollmentWithHttpMessagesAsync(string id, IndividualEnrollment enrollment, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
         /// Delete a device enrollment record.
         /// </summary>
         /// <param name='id'>

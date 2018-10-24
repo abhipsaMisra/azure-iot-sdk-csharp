@@ -48,61 +48,6 @@
           }
         }
       },
-      "put": {
-        "tags": [
-          "PUT"
-        ],
-        "summary": "Create or update a device enrollment record.",
-        "operationId": "CreateOrUpdateIndividualEnrollment",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The registration ID is alphanumeric, lowercase, and may contain hyphens.",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "enrollment",
-            "in": "body",
-            "description": "The device enrollment record.",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/IndividualEnrollment"
-            }
-          },
-          {
-            "name": "If-Match",
-            "in": "header",
-            "description": "The ETag of the enrollment record.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "$ref": "#/parameters/ApiVersionParameter"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/IndividualEnrollment"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ProvisioningServiceErrorDetails"
-            }
-          }
-        }
-      },
       "delete": {
         "tags": [
           "DELETE"
@@ -709,7 +654,8 @@
         },
         "registrationId": {
           "description": "The registration ID is alphanumeric, lowercase, and may contain hyphens.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "deviceId": {
           "description": "Desired IoT Hub device ID (optional).",
@@ -734,7 +680,8 @@
         },
         "etag": {
           "description": "The entity tag associated with the resource.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "provisioningStatus": {
           "description": "The provisioning status.",
@@ -1038,7 +985,8 @@
           "type": "string"
         },
         "info": {
-          "$ref": "#/definitions/X509CertificateInfo"
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
         }
       }
     },

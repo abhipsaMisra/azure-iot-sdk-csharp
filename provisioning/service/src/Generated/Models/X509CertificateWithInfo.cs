@@ -45,7 +45,7 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "info")]
-        public X509CertificateInfo Info { get; set; }
+        public X509CertificateInfo Info { get; private set; }
 
         /// <summary>
         /// Validate the object.

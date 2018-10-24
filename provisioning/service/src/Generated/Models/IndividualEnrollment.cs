@@ -102,11 +102,11 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         public DeviceCapabilities Capabilities { get; set; }
 
         /// <summary>
-        /// Gets or sets the registration ID is alphanumeric, lowercase, and
-        /// may contain hyphens.
+        /// Gets the registration ID is alphanumeric, lowercase, and may
+        /// contain hyphens.
         /// </summary>
         [JsonProperty(PropertyName = "registrationId")]
-        public string RegistrationId { get; set; }
+        public string RegistrationId { get; private set; }
 
         /// <summary>
         /// Gets or sets desired IoT Hub device ID (optional).
@@ -139,10 +139,10 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         public InitialTwin InitialTwin { get; set; }
 
         /// <summary>
-        /// Gets or sets the entity tag associated with the resource.
+        /// Gets the entity tag associated with the resource.
         /// </summary>
         [JsonProperty(PropertyName = "etag")]
-        public string Etag { get; set; }
+        public string Etag { get; private set; }
 
         /// <summary>
         /// Gets or sets the provisioning status. Possible values include:
@@ -213,10 +213,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// </exception>
         public virtual void Validate()
         {
-            if (RegistrationId == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "RegistrationId");
-            }
             if (Attestation == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "Attestation");

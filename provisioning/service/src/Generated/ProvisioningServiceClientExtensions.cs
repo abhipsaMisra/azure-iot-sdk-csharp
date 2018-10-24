@@ -38,32 +38,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service
             }
 
             /// <summary>
-            /// Create or update a device enrollment record.
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// The registration ID is alphanumeric, lowercase, and may contain hyphens.
-            /// </param>
-            /// <param name='enrollment'>
-            /// The device enrollment record.
-            /// </param>
-            /// <param name='ifMatch'>
-            /// The ETag of the enrollment record.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IndividualEnrollment> CreateOrUpdateIndividualEnrollmentAsync(this IProvisioningServiceClient operations, string id, IndividualEnrollment enrollment, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.CreateOrUpdateIndividualEnrollmentWithHttpMessagesAsync(id, enrollment, ifMatch, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
             /// Delete a device enrollment record.
             /// </summary>
             /// <param name='operations'>
