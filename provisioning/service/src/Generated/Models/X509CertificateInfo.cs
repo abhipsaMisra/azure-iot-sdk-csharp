@@ -6,7 +6,6 @@
 
 namespace Microsoft.Azure.Devices.Provisioning.Service.Models
 {
-    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Linq;
 
@@ -47,71 +46,52 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "subjectName")]
-        public string SubjectName { get; set; }
+        public string SubjectName { get; private set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "sha1Thumbprint")]
-        public string Sha1Thumbprint { get; set; }
+        public string Sha1Thumbprint { get; private set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "sha256Thumbprint")]
-        public string Sha256Thumbprint { get; set; }
+        public string Sha256Thumbprint { get; private set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "issuerName")]
-        public string IssuerName { get; set; }
+        public string IssuerName { get; private set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "notBeforeUtc")]
-        public System.DateTime NotBeforeUtc { get; set; }
+        public System.DateTime NotBeforeUtc { get; private set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "notAfterUtc")]
-        public System.DateTime NotAfterUtc { get; set; }
+        public System.DateTime NotAfterUtc { get; private set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "serialNumber")]
-        public string SerialNumber { get; set; }
+        public string SerialNumber { get; private set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int Version { get; private set; }
 
         /// <summary>
         /// Validate the object.
         /// </summary>
-        /// <exception cref="ValidationException">
+        /// <exception cref="Rest.ValidationException">
         /// Thrown if validation fails
         /// </exception>
         public virtual void Validate()
         {
-            if (SubjectName == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "SubjectName");
-            }
-            if (Sha1Thumbprint == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Sha1Thumbprint");
-            }
-            if (Sha256Thumbprint == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Sha256Thumbprint");
-            }
-            if (IssuerName == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "IssuerName");
-            }
-            if (SerialNumber == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "SerialNumber");
-            }
+            //Nothing to validate
         }
     }
 }

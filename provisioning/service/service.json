@@ -1005,31 +1005,39 @@
       "type": "object",
       "properties": {
         "subjectName": {
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "sha1Thumbprint": {
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "sha256Thumbprint": {
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "issuerName": {
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "notBeforeUtc": {
           "format": "date-time",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "notAfterUtc": {
           "format": "date-time",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "serialNumber": {
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "version": {
           "format": "int32",
-          "type": "integer"
+          "type": "integer",
+          "readOnly": true
         }
       }
     },
