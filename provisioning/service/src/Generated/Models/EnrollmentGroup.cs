@@ -29,8 +29,22 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// Initializes a new instance of the EnrollmentGroup class.
         /// </summary>
         /// <param name="enrollmentGroupId">Enrollment Group ID.</param>
-        /// <param name="attestation">Attestation method used by the
-        /// device.</param>
+        /// <param name="x509AttestationPrimaryCertificate">Attestation via
+        /// X509 - Primary Certificate.</param>
+        /// <param name="x509AttestationPrimaryCertificateInfo">Attestation via
+        /// X509 - Primary Certificate Info.</param>
+        /// <param name="x509AttestationSecondaryCertificate">Attestation via
+        /// X509 - Secondary Certificate.</param>
+        /// <param name="x509AttestationSecondaryCertificateInfo">Attestation
+        /// via X509 - Secondary Certificate Info.</param>
+        /// <param name="x509AttestationCAReferencePrimary">Attestation via
+        /// X509 - CA Reference Primary Certificate.</param>
+        /// <param name="x509AttestationCAReferenceSecondary">Attestation via
+        /// X509 - CA Reference Secondary Certificate.</param>
+        /// <param name="symmetricKeyAttestationPrimaryKey">Attestation via
+        /// Symmetric Key - Primary Key.</param>
+        /// <param name="symmetricKeyAttestationSecondaryKey">Attestation via
+        /// Symmetric Key - Secondary Key.</param>
         /// <param name="iotHubHostName">The Iot Hub host name.</param>
         /// <param name="initialTwin">Initial device twin.</param>
         /// <param name="etag">The entity tag associated with the
@@ -64,10 +78,17 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// level list of IoT hubs.</param>
         /// <param name="customAllocationDefinition">Custom allocation
         /// definition.</param>
-        public EnrollmentGroup(string enrollmentGroupId, AttestationMechanism attestation, string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
+        public EnrollmentGroup(string enrollmentGroupId, string x509AttestationPrimaryCertificate = default(string), X509CertificateInfo x509AttestationPrimaryCertificateInfo = default(X509CertificateInfo), string x509AttestationSecondaryCertificate = default(string), X509CertificateInfo x509AttestationSecondaryCertificateInfo = default(X509CertificateInfo), string x509AttestationCAReferencePrimary = default(string), string x509AttestationCAReferenceSecondary = default(string), string symmetricKeyAttestationPrimaryKey = default(string), string symmetricKeyAttestationSecondaryKey = default(string), string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
         {
             EnrollmentGroupId = enrollmentGroupId;
-            Attestation = attestation;
+            X509AttestationPrimaryCertificate = x509AttestationPrimaryCertificate;
+            X509AttestationPrimaryCertificateInfo = x509AttestationPrimaryCertificateInfo;
+            X509AttestationSecondaryCertificate = x509AttestationSecondaryCertificate;
+            X509AttestationSecondaryCertificateInfo = x509AttestationSecondaryCertificateInfo;
+            X509AttestationCAReferencePrimary = x509AttestationCAReferencePrimary;
+            X509AttestationCAReferenceSecondary = x509AttestationCAReferenceSecondary;
+            SymmetricKeyAttestationPrimaryKey = symmetricKeyAttestationPrimaryKey;
+            SymmetricKeyAttestationSecondaryKey = symmetricKeyAttestationSecondaryKey;
             IotHubHostName = iotHubHostName;
             InitialTwin = initialTwin;
             Etag = etag;
@@ -93,10 +114,54 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         public string EnrollmentGroupId { get; set; }
 
         /// <summary>
-        /// Gets or sets attestation method used by the device.
+        /// Gets or sets attestation via X509 - Primary Certificate.
         /// </summary>
-        [JsonProperty(PropertyName = "attestation")]
-        public AttestationMechanism Attestation { get; set; }
+        [JsonProperty(PropertyName = "x509AttestationPrimaryCertificate")]
+        public string X509AttestationPrimaryCertificate { get; set; }
+
+        /// <summary>
+        /// Gets attestation via X509 - Primary Certificate Info.
+        /// </summary>
+        [JsonProperty(PropertyName = "x509AttestationPrimaryCertificateInfo")]
+        public X509CertificateInfo X509AttestationPrimaryCertificateInfo { get; private set; }
+
+        /// <summary>
+        /// Gets or sets attestation via X509 - Secondary Certificate.
+        /// </summary>
+        [JsonProperty(PropertyName = "x509AttestationSecondaryCertificate")]
+        public string X509AttestationSecondaryCertificate { get; set; }
+
+        /// <summary>
+        /// Gets attestation via X509 - Secondary Certificate Info.
+        /// </summary>
+        [JsonProperty(PropertyName = "x509AttestationSecondaryCertificateInfo")]
+        public X509CertificateInfo X509AttestationSecondaryCertificateInfo { get; private set; }
+
+        /// <summary>
+        /// Gets or sets attestation via X509 - CA Reference Primary
+        /// Certificate.
+        /// </summary>
+        [JsonProperty(PropertyName = "x509AttestationCAReferencePrimary")]
+        public string X509AttestationCAReferencePrimary { get; set; }
+
+        /// <summary>
+        /// Gets or sets attestation via X509 - CA Reference Secondary
+        /// Certificate.
+        /// </summary>
+        [JsonProperty(PropertyName = "x509AttestationCAReferenceSecondary")]
+        public string X509AttestationCAReferenceSecondary { get; set; }
+
+        /// <summary>
+        /// Gets or sets attestation via Symmetric Key - Primary Key.
+        /// </summary>
+        [JsonProperty(PropertyName = "symmetricKeyAttestationPrimaryKey")]
+        public string SymmetricKeyAttestationPrimaryKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets attestation via Symmetric Key - Secondary Key.
+        /// </summary>
+        [JsonProperty(PropertyName = "symmetricKeyAttestationSecondaryKey")]
+        public string SymmetricKeyAttestationSecondaryKey { get; set; }
 
         /// <summary>
         /// Gets or sets the Iot Hub host name.
@@ -189,13 +254,13 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "EnrollmentGroupId");
             }
-            if (Attestation == null)
+            if (X509AttestationPrimaryCertificateInfo != null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Attestation");
+                X509AttestationPrimaryCertificateInfo.Validate();
             }
-            if (Attestation != null)
+            if (X509AttestationSecondaryCertificateInfo != null)
             {
-                Attestation.Validate();
+                X509AttestationSecondaryCertificateInfo.Validate();
             }
             if (ReprovisionPolicy != null)
             {

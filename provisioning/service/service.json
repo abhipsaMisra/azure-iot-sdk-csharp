@@ -666,9 +666,47 @@
           "description": "Current registration status.",
           "readOnly": true
         },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanism",
-          "description": "Attestation method used by the device."
+        "tpmAttestationEndorsementKey": {
+          "description": "Attestation via TPM - Endorsement Key.",
+          "type": "string"
+        },
+        "tpmAttestationStorageRootKey": {
+          "description": "Attestation via TPM - Storage Root Key.",
+          "type": "string"
+        },
+        "x509AttestationPrimaryCertificate": {
+          "description": "Attestation via X509 - Primary Certificate.",
+          "type": "string"
+        },
+        "x509AttestationPrimaryCertificateInfo": {
+          "description": "Attestation via X509 - Primary Certificate Info.",
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
+        },
+        "x509AttestationSecondaryCertificate": {
+          "description": "Attestation via X509 - Secondary Certificate.",
+          "type": "string"
+        },
+        "x509AttestationSecondaryCertificateInfo": {
+          "description": "Attestation via X509 - Secondary Certificate Info.",
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
+        },
+        "x509AttestationCAReferencePrimary": {
+          "description": "Attestation via X509 - CA Reference Primary Certificate.",
+          "type": "string"
+        },
+        "x509AttestationCAReferenceSecondary": {
+          "description": "Attestation via X509 - CA Reference Secondary Certificate.",
+          "type": "string"
+        },
+        "symmetricKeyAttestationPrimaryKey": {
+          "description": "Attestation via Symmetric Key - Primary Key.",
+          "type": "string"
+        },
+        "symmetricKeyAttestationSecondaryKey": {
+          "description": "Attestation via Symmetric Key - Secondary Key.",
+          "type": "string"
         },
         "iotHubHostName": {
           "description": "The Iot Hub host name.",
@@ -1053,9 +1091,39 @@
           "description": "Enrollment Group ID.",
           "type": "string"
         },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanism",
-          "description": "Attestation method used by the device."
+        "x509AttestationPrimaryCertificate": {
+          "description": "Attestation via X509 - Primary Certificate.",
+          "type": "string"
+        },
+        "x509AttestationPrimaryCertificateInfo": {
+          "description": "Attestation via X509 - Primary Certificate Info.",
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
+        },
+        "x509AttestationSecondaryCertificate": {
+          "description": "Attestation via X509 - Secondary Certificate.",
+          "type": "string"
+        },
+        "x509AttestationSecondaryCertificateInfo": {
+          "description": "Attestation via X509 - Secondary Certificate Info.",
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
+        },
+        "x509AttestationCAReferencePrimary": {
+          "description": "Attestation via X509 - CA Reference Primary Certificate.",
+          "type": "string"
+        },
+        "x509AttestationCAReferenceSecondary": {
+          "description": "Attestation via X509 - CA Reference Secondary Certificate.",
+          "type": "string"
+        },
+        "symmetricKeyAttestationPrimaryKey": {
+          "description": "Attestation via Symmetric Key - Primary Key.",
+          "type": "string"
+        },
+        "symmetricKeyAttestationSecondaryKey": {
+          "description": "Attestation via Symmetric Key - Secondary Key.",
+          "type": "string"
         },
         "iotHubHostName": {
           "description": "The Iot Hub host name.",
