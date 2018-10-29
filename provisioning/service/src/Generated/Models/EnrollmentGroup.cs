@@ -29,8 +29,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// Initializes a new instance of the EnrollmentGroup class.
         /// </summary>
         /// <param name="enrollmentGroupId">Enrollment Group ID.</param>
-        /// <param name="attestation">Attestation method used by the
-        /// device.</param>
         /// <param name="iotHubHostName">The Iot Hub host name.</param>
         /// <param name="initialTwin">Initial device twin.</param>
         /// <param name="etag">The entity tag associated with the
@@ -64,10 +62,9 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         /// level list of IoT hubs.</param>
         /// <param name="customAllocationDefinition">Custom allocation
         /// definition.</param>
-        public EnrollmentGroup(string enrollmentGroupId, AttestationMechanism attestation, string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
+        public EnrollmentGroup(string enrollmentGroupId, string iotHubHostName = default(string), InitialTwin initialTwin = default(InitialTwin), string etag = default(string), string provisioningStatus = default(string), ReprovisionPolicy reprovisionPolicy = default(ReprovisionPolicy), System.DateTime? createdDateTimeUtc = default(System.DateTime?), System.DateTime? lastUpdatedDateTimeUtc = default(System.DateTime?), string allocationPolicy = default(string), IList<string> iotHubs = default(IList<string>), CustomAllocationDefinition customAllocationDefinition = default(CustomAllocationDefinition))
         {
             EnrollmentGroupId = enrollmentGroupId;
-            Attestation = attestation;
             IotHubHostName = iotHubHostName;
             InitialTwin = initialTwin;
             Etag = etag;
@@ -93,12 +90,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         public string EnrollmentGroupId { get; set; }
 
         /// <summary>
-        /// Gets or sets attestation method used by the device.
-        /// </summary>
-        [JsonProperty(PropertyName = "attestation")]
-        public AttestationMechanism Attestation { get; set; }
-
-        /// <summary>
         /// Gets or sets the Iot Hub host name.
         /// </summary>
         [JsonProperty(PropertyName = "iotHubHostName")]
@@ -111,10 +102,10 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
         public InitialTwin InitialTwin { get; set; }
 
         /// <summary>
-        /// Gets or sets the entity tag associated with the resource.
+        /// Gets the entity tag associated with the resource.
         /// </summary>
         [JsonProperty(PropertyName = "etag")]
-        public string Etag { get; set; }
+        public string Etag { get; private set; }
 
         /// <summary>
         /// Gets or sets the provisioning status. Possible values include:
@@ -188,14 +179,6 @@ namespace Microsoft.Azure.Devices.Provisioning.Service.Models
             if (EnrollmentGroupId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "EnrollmentGroupId");
-            }
-            if (Attestation == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Attestation");
-            }
-            if (Attestation != null)
-            {
-                Attestation.Validate();
             }
             if (ReprovisionPolicy != null)
             {

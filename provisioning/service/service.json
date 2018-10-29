@@ -642,12 +642,17 @@
     },
     "IndividualEnrollment": {
       "description": "The device enrollment record.",
+      "discriminator": "objectType",
       "required": [
         "registrationId",
-        "attestation"
+        "objectType"
       ],
       "type": "object",
       "properties": {
+        "objectType": {
+          "description": "The type of enrollment",
+          "type": "string"
+        },
         "capabilities": {
           "$ref": "#/definitions/DeviceCapabilities",
           "description": "Capabilities of the device"
@@ -665,10 +670,6 @@
           "$ref": "#/definitions/DeviceRegistrationState",
           "description": "Current registration status.",
           "readOnly": true
-        },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanism",
-          "description": "Attestation method used by the device."
         },
         "iotHubHostName": {
           "description": "The Iot Hub host name.",
@@ -728,6 +729,70 @@
         "customAllocationDefinition": {
           "$ref": "#/definitions/CustomAllocationDefinition",
           "description": "Custom allocation definition."
+        }
+      }
+    },
+    "TpmIndividualEnrollment": {
+      "description": "The TPM device enrollment record.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollment"}],
+      "required": [
+        "endorsementKey"
+      ],
+      "type": "object",
+      "properties": {
+        "endorsementKey": {
+          "description": "Attestation via TPM - Endorsement Key.",
+          "type": "string"
+        },
+        "storageRootKey": {
+          "description": "Attestation via TPM - Storage Root Key.",
+          "type": "string"
+        }
+      }
+    },
+    "X509IndividualEnrollment": {
+      "description": "The X509 device enrollment record - with Client Certificate.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollment"}],
+      "required": [
+        "primaryCertificate"
+      ],
+      "type": "object",
+      "properties": {
+        "primaryCertificate": {
+          "description": "Attestation via X509 - Primary Certificate.",
+          "type": "string"
+        },
+        "primaryCerificateInfo": {
+          "description": "Attestation via X509 - Primary Certificate Info.",
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
+        },
+        "secondaryCerificate": {
+          "description": "Attestation via X509 - Secondary Certificate.",
+          "type": "string"
+        },
+        "secondaryCerificateInfo": {
+          "description": "Attestation via X509 - Secondary Certificate Info.",
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
+        }
+      }
+    },
+    "SymmetricKeyIndividualEnrollment": {
+      "description": "The device enrollment record - with Symmetric Key.",
+      "allOf": [{ "$ref": "#/definitions/IndividualEnrollment"}],
+      "required": [
+        "primaryKey"
+      ],
+      "type": "object",
+      "properties": {
+        "primaryKey": {
+          "description": "Attestation via Symmetric Key - Primary Key.",
+          "type": "string"
+        },
+        "secondaryKey": {
+          "description": "Attestation via Symmetric Key - Secondary Key.",
+          "type": "string"
         }
       }
     },
@@ -1043,19 +1108,20 @@
     },
     "EnrollmentGroup": {
       "description": "Enrollment group record.",
+      "discriminator": "objectType",
       "required": [
         "enrollmentGroupId",
-        "attestation"
+        "objectType"
       ],
       "type": "object",
       "properties": {
+        "objectType": {
+          "description": "The type of enrollment",
+          "type": "string"
+        },
         "enrollmentGroupId": {
           "description": "Enrollment Group ID.",
           "type": "string"
-        },
-        "attestation": {
-          "$ref": "#/definitions/AttestationMechanism",
-          "description": "Attestation method used by the device."
         },
         "iotHubHostName": {
           "description": "The Iot Hub host name.",
@@ -1067,7 +1133,8 @@
         },
         "etag": {
           "description": "The entity tag associated with the resource.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "provisioningStatus": {
           "description": "The provisioning status.",
@@ -1114,6 +1181,70 @@
         "customAllocationDefinition": {
           "$ref": "#/definitions/CustomAllocationDefinition",
           "description": "Custom allocation definition."
+        }
+      }
+    },
+    "X509EnrollmentGroupFromCertificate": {
+      "description": "The X509 device enrollment record - with Signing Certificate.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroup"}],
+      "required": [
+        "primaryCertificate"
+      ],
+      "type": "object",
+      "properties": {
+        "primaryCertificate": {
+          "description": "Attestation via X509 - Primary Certificate.",
+          "type": "string"
+        },
+        "primaryCerificateInfo": {
+          "description": "Attestation via X509 - Primary Certificate Info.",
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
+        },
+        "secondaryCerificate": {
+          "description": "Attestation via X509 - Secondary Certificate.",
+          "type": "string"
+        },
+        "secondaryCerificateInfo": {
+          "description": "Attestation via X509 - Secondary Certificate Info.",
+          "$ref": "#/definitions/X509CertificateInfo",
+          "readOnly": true
+        }
+      }
+    },
+    "X509EnrollmentGroupFromCAReferences": {
+      "description": "The X509 device enrollment record - with CA References.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroup"}],
+      "required": [
+        "primaryCertificate"
+      ],
+      "type": "object",
+      "properties": {
+        "primaryCertificate": {
+          "description": "Attestation via X509 - CA References Primary Certificate.",
+          "type": "string"
+        },
+        "secondaryCerificate": {
+          "description": "Attestation via X509 - CA References Secondary Certificate.",
+          "type": "string"
+        }
+      }
+    },
+    "SymmetricKeyEnrollmentGroup": {
+      "description": "The device enrollment record - with Symmetric Key.",
+      "allOf": [{ "$ref": "#/definitions/EnrollmentGroup"}],
+      "required": [
+        "primaryKey"
+      ],
+      "type": "object",
+      "properties": {
+        "primaryKey": {
+          "description": "Attestation via Symmetric Key - Primary Key.",
+          "type": "string"
+        },
+        "secondaryKey": {
+          "description": "Attestation via Symmetric Key - Secondary Key.",
+          "type": "string"
         }
       }
     },
