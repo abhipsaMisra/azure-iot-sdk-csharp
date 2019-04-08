@@ -1,4 +1,4 @@
-# Microsoft Azure IoT SDK for .NET
+﻿# Microsoft Azure IoT SDK for .NET
 
 This repository contains the following:
 * **Microsoft Azure IoT Hub device SDK for C#** to connect client devices to Azure IoT Hub with .NET
@@ -153,3 +153,5 @@ Microsoft collects performance and usage information which may be used to provid
 [dotnet-api-reference]: https://docs.microsoft.com/en-us/dotnet/api/overview/azure/iot/client?view=azure-dotnet
 [devbox-setup]: ./doc/devbox_setup.md
 [get-started-dotnet]: https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-csharp-csharp-getstarted
+
+A
