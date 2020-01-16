@@ -128,7 +128,7 @@ phases:
     name: Hosted Windows 2019 with VS2019
     timeoutInMinutes: 180
   steps:
-- script: |
+  - script: |
        call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\Tools\\VsDevCmd.bat"
        sn -Vr *,31bf3856ad364e35
 
