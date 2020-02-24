@@ -1,328 +1,581 @@
 name: $(BuildID)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 resources:
-  - repo: self
-    clean: true
-jobs:
-  ### Linux build ###
-  - job: LINUX
-    displayName: Linux
-    strategy:
-      # Change maxParallel to 1 make builds run in serial rather than in parallel
-      maxParallel: 3
-      matrix:
-        .Net Core 2.1:
-          FRAMEWORK: netcoreapp2.1
-        .Net Core 1.1:
-          FRAMEWORK: netcoreapp1.1
+- repo: self
+  clean: true
+phases:
 
-    condition: succeeded()
-    pool:
-      name: Hosted Ubuntu 1604
-      timeoutInMinutes: 180
-    steps:
-      - task: Docker@1
-        displayName: "Start TPM Simulator"
-        inputs:
-          containerregistrytype: "Container Registry"
-          command: "Run an image"
-          imageName: aziotbld/testtpm
-          containerName: "testtpm-instance"
+### Linux build ###
+- phase: LINUX
+  displayName: Linux
 
-          ports: |
-            127.0.0.1:2321:2321
-            127.0.0.1:2322:2322
+  condition: succeeded()
+  queue:
+    name: Hosted Ubuntu 1604
+    timeoutInMinutes: 180
+  steps:
+  - powershell: ./vsts/manual_checkout.ps1
+    displayName: 'GIT checkout'
+    env:
+      COMMIT_FROM: $(COMMIT_FROM)
 
-          restartPolicy: unlessStopped
+  - task: Docker@1
+    displayName: 'Start TPM Simulator'
+    inputs:
+      containerregistrytype: 'Container Registry'
 
-      - task: UseDotNet@2
-        displayName: "Install .NET Core App 1.1"
-        inputs:
-            # See https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/tool/dotnet-core-tool-installer?view=azure-devops
-            packageType: "sdk"
-            version: "1.1.x"
-            installationPath: $(Agent.ToolsDirectory)/dotnet
+      command: 'Run an image'
 
-      - task: UseDotNet@2
-        displayName: "Install .NET Core App 2.1"
-        inputs:
-            packageType: "sdk"
-            version: "2.1.x"
-            installationPath: $(Agent.ToolsDirectory)/dotnet
+      imageName: aziotbld/testtpm
 
-      - task: Docker@1
-        displayName: "Start Test Proxy"
-        inputs:
-          containerregistrytype: "Container Registry"
-          command: "Run an image"
-          imageName: aziotbld/testproxy
-          containerName: "testproxy-instance"
-          ports: "127.0.0.1:8888:8888"
-          restartPolicy: unlessStopped
+      containerName: 'testtpm-instance'
 
-      - powershell: ./vsts/gatedBuild.ps1
-        displayName: build
-        env:
-          IOTHUB_CONN_STRING_CSHARP: $(IOTHUB-CONN-STRING-CSHARP)
-          IOTHUB_PFX_X509_THUMBPRINT: $(IOTHUB-PFX-X509-THUMBPRINT)
-          IOTHUB_X509_PFX_CERTIFICATE: $(IOTHUB-X509-PFX-CERTIFICATE)
-          IOTHUB_EVENTHUB_CONN_STRING_CSHARP: $(IOTHUB-EVENTHUB-CONN-STRING-CSHARP)
-          IOTHUB_EVENTHUB_COMPATIBLE_NAME: $(IOTHUB-EVENTHUB-COMPATIBLE-NAME)
-          IOTHUB_EVENTHUB_CONSUMER_GROUP: $(IOTHUB-EVENTHUB-CONSUMER-GROUP)
-          DPS_IDSCOPE: $(DPS-IDSCOPE)
-          DPS_GLOBALDEVICEENDPOINT: $(DPS-GLOBALDEVICEENDPOINT)
-          DPS_INDIVIDUALX509_PFX_CERTIFICATE: $(DPS-INDIVIDUALX509-PFX-CERTIFICATE)
-          DPS_GROUPX509_PFX_CERTIFICATE: $(DPS-GROUPX509-PFX-CERTIFICATE)
-          DPS_X509_PFX_CERTIFICATE_PASSWORD: $(DPS-X509-PFX-CERTIFICATE-PASSWORD)
-          DPS_GROUPX509_CERTIFICATE_CHAIN: $(DPS-GROUPX509-CERTIFICATE-CHAIN)
-          DPS_TPM_REGISTRATIONID: $(DPS-TPM-REGISTRATIONID)
-          DPS_TPM_DEVICEID: $(DPS-TPM-DEVICEID)
-          PROVISIONING_CONNECTION_STRING: $(PROVISIONING-CONNECTION-STRING)
-          IOTHUB_DEVICE_CONN_STRING_INVALIDCERT: $(IOTHUB-DEVICE-CONN-STRING-INVALIDCERT)
-          IOTHUB_CONN_STRING_INVALIDCERT: $(IOTHUB-CONN-STRING-INVALIDCERT)
-          DPS_GLOBALDEVICEENDPOINT_INVALIDCERT: $(DPS-GLOBALDEVICEENDPOINT-INVALIDCERT)
-          PROVISIONING_CONNECTION_STRING_INVALIDCERT: $(PROVISIONING-CONNECTION-STRING-INVALIDCERT)
-          FAR_AWAY_IOTHUB_HOSTNAME: $(FAR-AWAY-IOTHUB-HOSTNAME)
-          CUSTOM_ALLOCATION_POLICY_WEBHOOK: $(CUSTOM-ALLOCATION-POLICY-WEBHOOK)
-          IOTHUB_PROXY_SERVER_ADDRESS: 127.0.0.1:8888
-          LA_AAD_TENANT: $(LA-AAD-TENANT)
-          LA_AAD_APP_ID: $(LA-AAD-APP-ID)
-          LA_AAD_APP_CERT_BASE64: $(LA-AAD-APP-CERT-BASE64)
-          LA_WORKSPACE_ID: $(LA-WORKSPACE-ID)
-          TARGET_BRANCH: $(System.PullRequest.TargetBranch)
-          FRAMEWORK: $(FRAMEWORK)
+      ports: |
+       127.0.0.1:2321:2321
+       127.0.0.1:2322:2322
 
-      - task: CopyFiles@2
-        displayName: "Copy files to the artifacts folder"
-        inputs:
-          SourceFolder: "$(Build.SourcesDirectory)"
-          Contents: "**/*.trx"
-          TargetFolder: "$(Build.ArtifactStagingDirectory)"
+      restartPolicy: unlessStopped
 
-        condition: always()
 
-      - task: PublishBuildArtifacts@1
-        displayName: "Publish Artifact: testresults_linux"
-        inputs:
-          ArtifactName: testresults_linux
+  - task: Docker@1
+    displayName: 'Start Test Proxy'
+    inputs:
+      containerregistrytype: 'Container Registry'
 
-        condition: always()
+      command: 'Run an image'
 
-      - task: PublishTestResults@2
-        displayName: "Publish Test Results **/*.trx"
-        inputs:
-          testRunner: VSTest
-          testRunTitle: "Linux Tests (netcoreapp2.1)"
-          testResultsFiles: "**/*.trx"
+      imageName: aziotbld/testproxy
 
-        condition: always()
+      containerName: 'testproxy-instance'
 
-  ### Windows build ###
-  - job: WINDOWS
-    displayName: Windows
-    strategy:
-      # Change maxParallel to 1 make builds run in serial rather than in parallel
-      maxParallel: 3
-      matrix:
-        .Net Core 2.1:
-          FRAMEWORK: netcoreapp2.1
-        .Net Core 1.1:
-          FRAMEWORK: netcoreapp1.1
-        .Net Framework 4.5.1:
-          FRAMEWORK: net451
+      ports: '127.0.0.1:8888:8888'
 
-    condition: succeeded()
-    pool:
-      name: Hosted VS2017
-      timeoutInMinutes: 180
-    steps:
-      - script: |
-          call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\Common7\\Tools\\VsDevCmd.bat"
-          sn -Vr *,31bf3856ad364e35
+      restartPolicy: unlessStopped
 
-        displayName: "Disable strong name validation"
+  - script: |
+       # Run dotnet first experience.
+       dotnet new
 
-      - script: |
-          choco install -y squid
+       # List active docker containers
+       docker ps -a
 
-        displayName: "Install Squid"
+       # Start build
+       vsts/linux_csharp_netcore.sh
+    displayName: build
+    env:
+      IOTHUB_CONN_STRING_CSHARP: $(IOTHUB-CONN-STRING-CSHARP)
+      IOTHUB_PFX_X509_THUMBPRINT: $(IOTHUB-PFX-X509-THUMBPRINT)
+      IOTHUB_X509_PFX_CERTIFICATE: $(IOTHUB-X509-PFX-CERTIFICATE)
+      IOTHUB_EVENTHUB_CONN_STRING_CSHARP: $(IOTHUB-EVENTHUB-CONN-STRING-CSHARP)
+      IOTHUB_EVENTHUB_COMPATIBLE_NAME: $(IOTHUB-EVENTHUB-COMPATIBLE-NAME)
+      IOTHUB_EVENTHUB_CONSUMER_GROUP: $(IOTHUB-EVENTHUB-CONSUMER-GROUP)
+      DPS_IDSCOPE: $(DPS-IDSCOPE)
+      DPS_GLOBALDEVICEENDPOINT: $(DPS-GLOBALDEVICEENDPOINT)
+      DPS_INDIVIDUALX509_PFX_CERTIFICATE: $(DPS-INDIVIDUALX509-PFX-CERTIFICATE)
+      DPS_GROUPX509_PFX_CERTIFICATE: $(DPS-GROUPX509-PFX-CERTIFICATE)
+      DPS_X509_PFX_CERTIFICATE_PASSWORD: $(DPS-X509-PFX-CERTIFICATE-PASSWORD)
+      DPS_GROUPX509_CERTIFICATE_CHAIN: $(DPS-GROUPX509-CERTIFICATE-CHAIN)
+      DPS_TPM_REGISTRATIONID: $(DPS-TPM-REGISTRATIONID)
+      DPS_TPM_DEVICEID: $(DPS-TPM-DEVICEID)
+      PROVISIONING_CONNECTION_STRING: $(PROVISIONING-CONNECTION-STRING)
+      IOTHUB_DEVICE_CONN_STRING_INVALIDCERT: $(IOTHUB-DEVICE-CONN-STRING-INVALIDCERT)
+      IOTHUB_CONN_STRING_INVALIDCERT: $(IOTHUB-CONN-STRING-INVALIDCERT)
+      DPS_GLOBALDEVICEENDPOINT_INVALIDCERT: $(DPS-GLOBALDEVICEENDPOINT-INVALIDCERT)
+      PROVISIONING_CONNECTION_STRING_INVALIDCERT: $(PROVISIONING-CONNECTION-STRING-INVALIDCERT)
+      FAR_AWAY_IOTHUB_HOSTNAME: $(FAR-AWAY-IOTHUB-HOSTNAME)
+      CUSTOM_ALLOCATION_POLICY_WEBHOOK: $(CUSTOM-ALLOCATION-POLICY-WEBHOOK)
+      IOTHUB_PROXY_SERVER_ADDRESS: 127.0.0.1:8888
+      LA_AAD_TENANT: $(LA-AAD-TENANT)
+      LA_AAD_APP_ID: $(LA-AAD-APP-ID)
+      LA_AAD_APP_CERT_BASE64: $(LA-AAD-APP-CERT-BASE64)
+      LA_WORKSPACE_ID: $(LA-WORKSPACE-ID)
 
-      - powershell: ./vsts/start_tpm_windows.ps1
-        displayName: "Start TPM Simulator"
-        env:
-          COMMIT_FROM: $(COMMIT_FROM)
+  - task: CopyFiles@2
+    displayName: 'Copy files to the artifacts folder'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'
 
-      - powershell: ./vsts/gatedBuild.ps1
-        displayName: build
-        env:
-          IOTHUB_CONN_STRING_CSHARP: $(IOTHUB-CONN-STRING-CSHARP)
-          IOTHUB_PFX_X509_THUMBPRINT: $(IOTHUB-PFX-X509-THUMBPRINT)
-          IOTHUB_X509_PFX_CERTIFICATE: $(IOTHUB-X509-PFX-CERTIFICATE)
-          IOTHUB_EVENTHUB_CONN_STRING_CSHARP: $(IOTHUB-EVENTHUB-CONN-STRING-CSHARP)
-          IOTHUB_EVENTHUB_COMPATIBLE_NAME: $(IOTHUB-EVENTHUB-COMPATIBLE-NAME)
-          IOTHUB_EVENTHUB_CONSUMER_GROUP: $(IOTHUB-EVENTHUB-CONSUMER-GROUP)
-          DPS_IDSCOPE: $(DPS-IDSCOPE)
-          DPS_GLOBALDEVICEENDPOINT: $(DPS-GLOBALDEVICEENDPOINT)
-          DPS_INDIVIDUALX509_PFX_CERTIFICATE: $(DPS-INDIVIDUALX509-PFX-CERTIFICATE)
-          DPS_GROUPX509_PFX_CERTIFICATE: $(DPS-GROUPX509-PFX-CERTIFICATE)
-          DPS_X509_PFX_CERTIFICATE_PASSWORD: $(DPS-X509-PFX-CERTIFICATE-PASSWORD)
-          DPS_GROUPX509_CERTIFICATE_CHAIN: $(DPS-GROUPX509-CERTIFICATE-CHAIN)
-          DPS_TPM_REGISTRATIONID: $(DPS-TPM-REGISTRATIONID)
-          DPS_TPM_DEVICEID: $(DPS-TPM-DEVICEID)
-          PROVISIONING_CONNECTION_STRING: $(PROVISIONING-CONNECTION-STRING)
-          IOTHUB_DEVICE_CONN_STRING_INVALIDCERT: $(IOTHUB-DEVICE-CONN-STRING-INVALIDCERT)
-          IOTHUB_CONN_STRING_INVALIDCERT: $(IOTHUB-CONN-STRING-INVALIDCERT)
-          DPS_GLOBALDEVICEENDPOINT_INVALIDCERT: $(DPS-GLOBALDEVICEENDPOINT-INVALIDCERT)
-          PROVISIONING_CONNECTION_STRING_INVALIDCERT: $(PROVISIONING-CONNECTION-STRING-INVALIDCERT)
-          FAR_AWAY_IOTHUB_HOSTNAME: $(FAR-AWAY-IOTHUB-HOSTNAME)
-          CUSTOM_ALLOCATION_POLICY_WEBHOOK: $(CUSTOM-ALLOCATION-POLICY-WEBHOOK)
-          IOTHUB_PROXY_SERVER_ADDRESS: 127.0.0.1:3128
-          LA_AAD_TENANT: $(LA-AAD-TENANT)
-          LA_AAD_APP_ID: $(LA-AAD-APP-ID)
-          LA_AAD_APP_CERT_BASE64: $(LA-AAD-APP-CERT-BASE64)
-          LA_WORKSPACE_ID: $(LA-WORKSPACE-ID)
-          TARGET_BRANCH: $(System.PullRequest.TargetBranch)
-          FRAMEWORK: $(FRAMEWORK)
+      Contents: '**/*.trx'
 
-      - task: CopyFiles@2
-        displayName: "Copy TRX files to the artifacts folder"
-        inputs:
-          SourceFolder: "$(Build.SourcesDirectory)"
-          Contents: "**/*.trx"
-          TargetFolder: "$(Build.ArtifactStagingDirectory)"
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-        condition: always()
+    condition: always()
 
-      - task: CopyFiles@2
-        displayName: "Copy ETL files to the artifacts folder"
-        inputs:
-          SourceFolder: "$(Build.SourcesDirectory)"
-          Contents: "**/*.etl"
-          TargetFolder: "$(Build.ArtifactStagingDirectory)"
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: testresults_linux'
+    inputs:
+      ArtifactName: testresults_linux
 
-        condition: always()
+    condition: always()
 
-      - task: PublishBuildArtifacts@1
-        displayName: "Publish Artifact: testresults"
-        inputs:
-          ArtifactName: testresults_windows_$(FRAMEWORK)
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results **/*.trx'
+    inputs:
+      testRunner: VSTest
+      testRunTitle: 'Linux Tests'
+      testResultsFiles: '**/*.trx'
 
-        condition: always()
+    condition: always()
 
-      - task: PublishTestResults@2
-        displayName: "Publish Test Results **/*.trx"
-        inputs:
-          testRunner: VSTest
-          testResultsFiles: "**/*.trx"
-          testRunTitle: "Windows Tests ($(FRAMEWORK))"
-          platform: Windows
-          configuration: "Debug UT + Release E2E ($(FRAMEWORK))"
+### Windows build ###
 
-        condition: always()
+- phase: WINDOWS
+  displayName: Windows
+# Uncomment to serialize builds:
+#  dependsOn: LINUX
 
-  ### WINDOWS Analyzers ###
-  - job: Analyzers
-    displayName: Analyzers
+  condition: succeeded()
+  queue:
+    name: Hosted VS2017
+    timeoutInMinutes: 180
+  steps:
+  - script: |
+       call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\Common7\\Tools\\VsDevCmd.bat"
+       sn -Vr *,31bf3856ad364e35
 
-    condition: succeeded()
-    pool:
-      name: Hosted VS2017
-      timeoutInMinutes: 60
-    steps:
-      - script: |
-          rem Run dotnet first experience.
-          dotnet new
-          rem Start build
-          build.cmd -clean -build -configuration Debug -package
+    displayName: 'Disable strong name validation'
 
-        displayName: build
+  - script: |
+       choco install -y squid
 
-      - task: ComponentGovernanceComponentDetection@0
-        displayName: "Component Detection"
+    displayName: 'Install Squid'
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
-        displayName: "Run MpCmdRun.exe"
-        inputs:
-          EnableServices: true
-          SignatureFreshness: OneDay
+  - script: |
+       choco install -y netfx-4.5.2-devpack
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-autoapplicability.AutoApplicability@1
-        displayName: "Run AutoApplicability"
-        inputs:
-          ExternalRelease: true
+    displayName: 'Install .NET 4.5.2 Targetting Pack'
 
-          IsSoftware: true
+  - powershell: ./vsts/manual_checkout.ps1
+    displayName: 'GIT checkout'
+    env:
+      COMMIT_FROM: $(COMMIT_FROM)
 
-          UsesHSM: true
+  - script: |
+       rem Run dotnet first experience.
+       dotnet new
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
-        displayName: "Run BinSkim "
-        inputs:
-          arguments: 'analyze  $(Build.SourcesDirectory)\Microsoft.Azure.Devices.*.dll --recurse --verbose'
+       rem List active docker containers
+       docker ps -a
 
-        # TODO #181 Config issue: must run on Debug builds only with valid PDBs.
-        enabled: false
+       rem Start
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-codemetrics.CodeMetrics@1
-        displayName: "Run CodeMetrics "
-        inputs:
-          Files: '$(Build.SourcesDirectory)\**\Microsoft.Azure.Devices.*.dll'
+       rem Start ETL logging
+       logman create trace IotTrace -o iot.etl -pf tools/CaptureLogs/iot_providers.txt
+       logman start IotTrace
 
-        # TODO #181 Config issue: must run on Debug builds only with valid PDBs.
-        enabled: false
+       rem Start build
+       vsts/windows_csharp.cmd
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
-        displayName: "Run CredScan"
-        inputs:
-          suppressionsFile: vsts/CredScanSuppressions.json
-          regexMatchTimeoutInSeconds: 5
+       rem Stop ETL logging
+       logman stop IotTrace
+       logman delete IotTrace
 
-          # TODO #181 Samples / tests fail the test due to fake connection strings.
-          debugMode: false
+    displayName: build
+    env:
+      IOTHUB_CONN_STRING_CSHARP: $(IOTHUB-CONN-STRING-CSHARP)
+      IOTHUB_PFX_X509_THUMBPRINT: $(IOTHUB-PFX-X509-THUMBPRINT)
+      IOTHUB_X509_PFX_CERTIFICATE: $(IOTHUB-X509-PFX-CERTIFICATE)
+      IOTHUB_EVENTHUB_CONN_STRING_CSHARP: $(IOTHUB-EVENTHUB-CONN-STRING-CSHARP)
+      IOTHUB_EVENTHUB_COMPATIBLE_NAME: $(IOTHUB-EVENTHUB-COMPATIBLE-NAME)
+      IOTHUB_EVENTHUB_CONSUMER_GROUP: $(IOTHUB-EVENTHUB-CONSUMER-GROUP)
+      DPS_IDSCOPE: $(DPS-IDSCOPE)
+      DPS_GLOBALDEVICEENDPOINT: $(DPS-GLOBALDEVICEENDPOINT)
+      DPS_INDIVIDUALX509_PFX_CERTIFICATE: $(DPS-INDIVIDUALX509-PFX-CERTIFICATE)
+      DPS_GROUPX509_PFX_CERTIFICATE: $(DPS-GROUPX509-PFX-CERTIFICATE)
+      DPS_X509_PFX_CERTIFICATE_PASSWORD: $(DPS-X509-PFX-CERTIFICATE-PASSWORD)
+      DPS_GROUPX509_CERTIFICATE_CHAIN: $(DPS-GROUPX509-CERTIFICATE-CHAIN)
+      DPS_TPM_REGISTRATIONID: $(DPS-TPM-REGISTRATIONID)
+      DPS_TPM_DEVICEID: $(DPS-TPM-DEVICEID)
+      PROVISIONING_CONNECTION_STRING: $(PROVISIONING-CONNECTION-STRING)
+      IOTHUB_DEVICE_CONN_STRING_INVALIDCERT: $(IOTHUB-DEVICE-CONN-STRING-INVALIDCERT)
+      IOTHUB_CONN_STRING_INVALIDCERT: $(IOTHUB-CONN-STRING-INVALIDCERT)
+      DPS_GLOBALDEVICEENDPOINT_INVALIDCERT: $(DPS-GLOBALDEVICEENDPOINT-INVALIDCERT)
+      PROVISIONING_CONNECTION_STRING_INVALIDCERT: $(PROVISIONING-CONNECTION-STRING-INVALIDCERT)
+      FAR_AWAY_IOTHUB_HOSTNAME: $(FAR-AWAY-IOTHUB-HOSTNAME)
+      CUSTOM_ALLOCATION_POLICY_WEBHOOK: $(CUSTOM-ALLOCATION-POLICY-WEBHOOK)
+      IOTHUB_PROXY_SERVER_ADDRESS: 127.0.0.1:3128
+      LA_AAD_TENANT: $(LA-AAD-TENANT)
+      LA_AAD_APP_ID: $(LA-AAD-APP-ID)
+      LA_AAD_APP_CERT_BASE64: $(LA-AAD-APP-CERT-BASE64)
+      LA_WORKSPACE_ID: $(LA-WORKSPACE-ID)
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
-        displayName: "Run PoliCheck"
-        inputs:
-          targetType: F
+  - task: CopyFiles@2
+    displayName: 'Copy TRX files to the artifacts folder'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-vulnerabilityassessment.VulnerabilityAssessment@0
-        displayName: "Run Vulnerability Assessment"
+      Contents: '**/*.trx'
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
-        displayName: "Publish Security Analysis Logs"
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-report.SdtReport@1
-        displayName: "Create Security Analysis Report"
-        inputs:
-          AllTools: true
+    condition: always()
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-uploadtotsa.TSAUpload@1
-        displayName: "TSA upload"
-        inputs:
-          tsaVersion: TsaV2
-          tsaStamp: Azure
-          codeBaseName: "Azure-Iot-SDK-CSharp-Master"
+  - task: CopyFiles@2
+    displayName: 'Copy ETL files to the artifacts folder'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'
 
-      - task: securedevelopmentteam.vss-secure-development-tools.build-task-postanalysis.PostAnalysis@1
-        displayName: "Post Analysis"
-        inputs:
-          AllTools: true
+      Contents: '**/*.etl'
 
-        # TODO #181 Enable post analysis to break builds after all above items are enabled.
-        enabled: false
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-  # END: SDL and Compliance tasks #
+    condition: always()
 
-  - job: NETMF
-    displayName: NetMF
-    condition: succeeded()
-    pool:
-      name: win
-      timeoutInMinutes: 1
-    steps:
-      - script: |
-          call "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\Tools\\VsDevCmd.bat"
-          vsts/windows_csharp_mf.cmd
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: testresults'
+    inputs:
+      ArtifactName: testresults_windows
 
-        displayName: build
+    condition: always()
+
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results **/*.trx'
+    inputs:
+      testRunner: VSTest
+
+      testResultsFiles: '**/*.trx'
+
+      testRunTitle: 'Windows Tests'
+
+      platform: Windows
+
+      configuration: 'Debug UT + Release E2E'
+
+    condition: always()
+
+### Windows IoT Core build ###
+
+- phase: IoTUAP
+  displayName: Windows IoT Core
+# Uncomment to serialize builds:
+#  dependsOn: WINDOWS
+
+  condition: succeeded()
+
+  queue:
+    name: win-iot-core
+    demands:
+      - e2e-tests-os -equals WinIoTCore_x64
+
+  steps:
+  - powershell: ./vsts/manual_checkout.ps1
+    displayName: 'GIT checkout $(COMMIT_FROM)'
+    env:
+      COMMIT_FROM: $(COMMIT_FROM)
+
+  - script: |
+       rem Start
+       
+       rem Start Squid
+       C:\Data\Squid\bin\squid.exe
+       
+       rem Start ETL logging
+       tracelog -stop IotTrace
+       rem Convert the list of provider GUIDs (iot_providers.txt) to a format compatible with the tracelog tool.
+       for /F "eol=; tokens=2 delims={}" %%i in (tools\CaptureLogs\iot_providers.txt) do @echo %%i;0xffffffffffffffff;0xff >> tools\CaptureLogs\iot_providers_temp.txt
+       tracelog -start IotTrace -f iot.etl -guid tools\CaptureLogs\iot_providers_temp.txt
+       del tools\CaptureLogs\iot_providers_temp.txt
+       
+       rem Start build
+       vsts/windows_csharp.cmd
+       
+       rem Stop ETL logging
+       tracelog -flush IotTrace
+       tracelog -stop IotTrace
+       
+    displayName: Build
+    continueOnError: true
+    env:
+      IOTHUB_CONN_STRING_CSHARP: $(IOTHUB-CONN-STRING-CSHARP)
+      IOTHUB_PFX_X509_THUMBPRINT: $(IOTHUB-PFX-X509-THUMBPRINT)
+      IOTHUB_X509_PFX_CERTIFICATE: $(IOTHUB-X509-PFX-CERTIFICATE)
+      IOTHUB_EVENTHUB_CONN_STRING_CSHARP: $(IOTHUB-EVENTHUB-CONN-STRING-CSHARP)
+      IOTHUB_EVENTHUB_COMPATIBLE_NAME: $(IOTHUB-EVENTHUB-COMPATIBLE-NAME)
+      IOTHUB_EVENTHUB_CONSUMER_GROUP: $(IOTHUB-EVENTHUB-CONSUMER-GROUP)
+      DPS_IDSCOPE: $(DPS-IDSCOPE)
+      DPS_GLOBALDEVICEENDPOINT: $(DPS-GLOBALDEVICEENDPOINT)
+      DPS_INDIVIDUALX509_PFX_CERTIFICATE: $(DPS-INDIVIDUALX509-PFX-CERTIFICATE)
+      DPS_GROUPX509_PFX_CERTIFICATE: $(DPS-GROUPX509-PFX-CERTIFICATE)
+      DPS_X509_PFX_CERTIFICATE_PASSWORD: $(DPS-X509-PFX-CERTIFICATE-PASSWORD)
+      DPS_GROUPX509_CERTIFICATE_CHAIN: $(DPS-GROUPX509-CERTIFICATE-CHAIN)
+      DPS_TPM_REGISTRATIONID: $(DPS-TPM-REGISTRATIONID)
+      DPS_TPM_DEVICEID: $(DPS-TPM-DEVICEID)
+      PROVISIONING_CONNECTION_STRING: $(PROVISIONING-CONNECTION-STRING)
+      IOTHUB_DEVICE_CONN_STRING_INVALIDCERT: $(IOTHUB-DEVICE-CONN-STRING-INVALIDCERT)
+      IOTHUB_CONN_STRING_INVALIDCERT: $(IOTHUB-CONN-STRING-INVALIDCERT)
+      DPS_GLOBALDEVICEENDPOINT_INVALIDCERT: $(DPS-GLOBALDEVICEENDPOINT-INVALIDCERT)
+      PROVISIONING_CONNECTION_STRING_INVALIDCERT: $(PROVISIONING-CONNECTION-STRING-INVALIDCERT)
+      FAR_AWAY_IOTHUB_HOSTNAME: $(FAR-AWAY-IOTHUB-HOSTNAME)
+      CUSTOM_ALLOCATION_POLICY_WEBHOOK: $(CUSTOM-ALLOCATION-POLICY-WEBHOOK)
+      IOTHUB_PROXY_SERVER_ADDRESS: 127.0.0.1:3128
+      LA_AAD_TENANT: $(LA-AAD-TENANT)
+      LA_AAD_APP_ID: $(LA-AAD-APP-ID)
+      LA_AAD_APP_CERT_BASE64: $(LA-AAD-APP-CERT-BASE64)
+      LA_WORKSPACE_ID: $(LA-WORKSPACE-ID)
+
+  - task: CopyFiles@2
+    displayName: 'Copy TRX files to the artifacts folder'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'
+
+      Contents: '**/*.trx'
+
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    condition: always()
+
+  - task: CopyFiles@2
+    displayName: 'Copy ETL files to the artifacts folder'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'
+
+      Contents: '**/*.etl'
+
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    condition: always()
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: testresults'
+    inputs:
+      ArtifactName: testresults_iotuap
+
+    condition: always()
+
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results **/*.trx'
+    inputs:
+      testRunner: VSTest
+
+      testResultsFiles: '**/*.trx'
+
+      testRunTitle: 'Windows IoT Core Tests'
+
+      platform: Windows
+
+      configuration: 'Debug UT + Release E2E'
+
+    condition: always()
+
+### WINDOWS Analyzers ###
+- phase: Analyzers
+  displayName: Analyzers
+
+  condition: succeeded()
+  queue:
+    name: Hosted VS2017
+    timeoutInMinutes: 60
+  steps:
+
+  - powershell: ./vsts/manual_checkout.ps1
+    displayName: 'GIT checkout'
+    env:
+      COMMIT_FROM: $(COMMIT_FROM)
+
+  - script: |
+       rem Run dotnet first experience.
+       dotnet new
+
+       rem Start build
+       build.cmd -clean -nounittests -configuration Debug
+
+    displayName: build
+
+  - task: ComponentGovernanceComponentDetection@0
+    displayName: 'Component Detection'
+
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
+    displayName: 'Run MpCmdRun.exe'
+    inputs:
+      EnableServices: true
+      SignatureFreshness: OneDay
+
+
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-autoapplicability.AutoApplicability@1
+    displayName: 'Run AutoApplicability'
+    inputs:
+      ExternalRelease: true
+
+      IsSoftware: true
+
+      UsesHSM: true
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
+    displayName: 'Run BinSkim '
+    inputs:
+      arguments: 'analyze  $(Build.SourcesDirectory)\Microsoft.Azure.Devices.*.dll $(Build.SourcesDirectory)\DeviceExplorer.exe --recurse --verbose'
+
+    # TODO #181 Config issue: must run on Debug builds only with valid PDBs.
+    enabled: false
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-codemetrics.CodeMetrics@1
+    displayName: 'Run CodeMetrics '
+    inputs:
+      Files: '$(Build.SourcesDirectory)\**\DeviceExplorer.exe;$(Build.SourcesDirectory)\**\Microsoft.Azure.Devices.*.dll'
+
+    # TODO #181 Config issue: must run on Debug builds only with valid PDBs.
+    enabled: false
+
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
+    displayName: 'Run CredScan'
+    inputs:
+      suppressionsFile: vsts/CredScanSuppressions.json
+      regexMatchTimeoutInSeconds: 5
+
+    # TODO #181 Samples / tests fail the test due to fake connection strings.
+      debugMode: false
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
+    displayName: 'Run PoliCheck'
+    inputs:
+      targetType: F
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-vulnerabilityassessment.VulnerabilityAssessment@0
+    displayName: 'Run Vulnerability Assessment'
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
+    displayName: 'Publish Security Analysis Logs'
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-report.SdtReport@1
+    displayName: 'Create Security Analysis Report'
+    inputs:
+      AllTools: true
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-uploadtotsa.TSAUpload@1
+    displayName: 'TSA upload'
+    inputs:
+      tsaVersion: TsaV2
+      tsaStamp: Azure
+      codeBaseName: 'Azure-Iot-SDK-CSharp-Master'
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-postanalysis.PostAnalysis@1
+    displayName: 'Post Analysis'
+    inputs:
+      AllTools: true
+
+    # TODO #181 Enable post analysis to break builds after all above items are enabled.
+    enabled: false
+
+# END: SDL and Compliance tasks #
+
+- phase: NETMF
+  displayName: NetMF
+
+  condition: succeeded()
+  queue:
+    name: win
+    timeoutInMinutes: 1
+  steps:
+  - powershell: ./vsts/manual_checkout.ps1
+    displayName: 'GIT checkout'
+    env:
+      COMMIT_FROM: $(COMMIT_FROM)
+
+  - script: |
+       call "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\Tools\\VsDevCmd.bat"
+       vsts/windows_csharp_mf.cmd
+
+    displayName: build
+
+- phase: DEVEXP
+  displayName: csharp-deviceexplorer
+
+  condition: succeeded()
+  queue:
+    name: win
+    timeoutInMinutes: 15
+
+  steps:
+  - powershell: ./vsts/manual_checkout.ps1
+    displayName: 'GIT checkout'
+    env:
+      COMMIT_FROM: $(COMMIT_FROM)
+
+  - script: |
+       call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\Common7\\Tools\\VsDevCmd.bat"
+       vsts/windows_csharp_deviceexplorer.cmd
+    displayName: build
+
+# BEGIN: SDL and Compliance tasks #
+
+  - task: ComponentGovernanceComponentDetection@0
+    displayName: 'Component Detection'
+
+    # TODO #181 CD component bugs currently investigated by the owning team.
+    enabled: false
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
+    displayName: 'Run MpCmdRun.exe'
+    inputs:
+      EnableServices: true
+
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-autoapplicability.AutoApplicability@1
+    displayName: 'Run AutoApplicability'
+    inputs:
+      ExternalRelease: true
+
+      IsSoftware: true
+
+      UsesHSM: true
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
+    displayName: 'Run BinSkim '
+    inputs:
+      arguments: 'analyze  $(Build.SourcesDirectory)\Microsoft.Azure.Devices.*.dll $(Build.SourcesDirectory)\DeviceExplorer.exe --recurse --verbose'
+
+    # TODO #181 Config issue: must run on Debug builds only with valid PDBs.
+    enabled: false
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-codemetrics.CodeMetrics@1
+    displayName: 'Run CodeMetrics '
+    inputs:
+      Files: '$(Build.SourcesDirectory)\**\DeviceExplorer.exe;$(Build.SourcesDirectory)\**\Microsoft.Azure.Devices.*.dll'
+
+    # TODO #181 Config issue: must run on Debug builds only with valid PDBs.
+    enabled: false
+
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
+    displayName: 'Run CredScan'
+    inputs:
+      suppressionsFile: vsts/CredScanSuppressions.json
+      regexMatchTimeoutInSeconds: 5
+
+    # TODO #181 Samples / tests fail the test due to fake connection strings.
+      debugMode: false
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
+    displayName: 'Run PoliCheck'
+    inputs:
+      targetType: F
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-vulnerabilityassessment.VulnerabilityAssessment@0
+    displayName: 'Run Vulnerability Assessment'
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
+    displayName: 'Publish Security Analysis Logs'
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-report.SdtReport@1
+    displayName: 'Create Security Analysis Report'
+    inputs:
+      AllTools: true
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-uploadtotsa.TSAUpload@1
+    displayName: 'TSA upload'
+    inputs:
+      tsaVersion: TsaV2
+      tsaStamp: Azure
+      codeBaseName: 'Azure-Iot-SDK-CSharp-Master'
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-postanalysis.PostAnalysis@1
+    displayName: 'Post Analysis'
+    inputs:
+      AllTools: true
+
+    # TODO #181 Enable post analysis to break builds after all above items are enabled.
+    enabled: false
 
 # END: SDL and Compliance tasks #
