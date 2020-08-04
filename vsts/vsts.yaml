@@ -152,7 +152,7 @@ jobs:
       - task: VSBuild@1
         inputs:
           solution: 'azureiot.sln'
-          msbuildArgs: 'TargetFrameworkVersion=$FRAMEWORK'
+          #msbuildArgs: 'TargetFrameworkVersion=$FRAMEWORK'
           configuration: 'Debug'
           clean: true
 
