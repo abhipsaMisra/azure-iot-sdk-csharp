@@ -179,7 +179,7 @@ jobs:
           FRAMEWORK: $(FRAMEWORK)
         inputs:
           testSelector: 'testAssemblies'
-          testAssemblyVer2: '**\*test*.dll'
+          testAssemblyVer2: '**\*test*.csproj'
           searchFolder: '$(System.DefaultWorkingDirectory)'
           runInParallel: true
 
