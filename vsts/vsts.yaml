@@ -141,17 +141,17 @@ jobs:
 
         displayName: "Disable strong name validation"
 
-      - script: |
-          choco install -y squid
+      #- script: |
+      #    choco install -y squid
 
-        displayName: "Install Squid"
+      #  displayName: "Install Squid"
 
-      - powershell: ./vsts/start_tpm_windows.ps1
-        displayName: "Start TPM Simulator"
+      #- powershell: ./vsts/start_tpm_windows.ps1
+      #  displayName: "Start TPM Simulator"
 
       - task: VSBuild@1
         inputs:
-          solution: '**\*.sln'
+          solution: 'azureiot.sln'
           msbuildArgs: 'TargetFrameworkVersion=$FRAMEWORK'
           configuration: 'Debug'
           clean: true
