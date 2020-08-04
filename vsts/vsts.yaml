@@ -132,7 +132,8 @@ jobs:
 
     condition: succeeded()
     pool:
-      vmImage: 'windows-latest'
+      name: Hosted VS2017
+      timeoutInMinutes: 180
     steps:
       - script: |
           call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\Common7\\Tools\\VsDevCmd.bat"
@@ -140,22 +141,16 @@ jobs:
 
         displayName: "Disable strong name validation"
 
-      #- script: |
-      #    choco install -y squid
+      - script: |
+          choco install -y squid
 
-      #  displayName: "Install Squid"
+        displayName: "Install Squid"
 
-      #- powershell: ./vsts/start_tpm_windows.ps1
-      #  displayName: "Start TPM Simulator"
+      - powershell: ./vsts/start_tpm_windows.ps1
+        displayName: "Start TPM Simulator"
 
-      - task: VSBuild@1
-        inputs:
-          solution: 'azureiot.sln'
-          #msbuildArgs: 'TargetFrameworkVersion=$FRAMEWORK'
-          configuration: 'Debug'
-          clean: true
-
-      - task: VSTest@2
+      - powershell: ./vsts/gatedBuild.ps1
+        displayName: build
         env:
           IOTHUB_CONN_STRING_CSHARP: $(IOTHUB-CONN-STRING-CSHARP)
           IOTHUB_PFX_X509_THUMBPRINT: $(IOTHUB-PFX-X509-THUMBPRINT)
@@ -184,11 +179,6 @@ jobs:
           E2E_IKEY: $(E2E-IKEY)
           TARGET_BRANCH: $(System.PullRequest.TargetBranch)
           FRAMEWORK: $(FRAMEWORK)
-        inputs:
-          testSelector: 'testAssemblies'
-          testAssemblyVer2: '**\*test*.csproj'
-          searchFolder: '$(System.DefaultWorkingDirectory)'
-          runInParallel: true
 
       - task: CopyFiles@2
         displayName: "Copy TRX files to the artifacts folder"
