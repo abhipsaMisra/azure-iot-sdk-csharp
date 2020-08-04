@@ -148,9 +148,7 @@ jobs:
 
       - powershell: ./vsts/start_tpm_windows.ps1
         displayName: "Start TPM Simulator"
-
-      - powershell: ./vsts/gatedBuild.ps1
-        displayName: build
+      - task: VSTest@2
         env:
           IOTHUB_CONN_STRING_CSHARP: $(IOTHUB-CONN-STRING-CSHARP)
           IOTHUB_PFX_X509_THUMBPRINT: $(IOTHUB-PFX-X509-THUMBPRINT)
@@ -179,6 +177,11 @@ jobs:
           E2E_IKEY: $(E2E-IKEY)
           TARGET_BRANCH: $(System.PullRequest.TargetBranch)
           FRAMEWORK: $(FRAMEWORK)
+        inputs:
+          testSelector: 'testAssemblies'
+          testAssemblyVer2: '**\*test*.dll'
+          searchFolder: '$(System.DefaultWorkingDirectory)'
+          runInParallel: true
 
       - task: CopyFiles@2
         displayName: "Copy TRX files to the artifacts folder"
