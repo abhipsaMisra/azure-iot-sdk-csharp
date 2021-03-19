@@ -4,7 +4,6 @@
 
 commit 1
 commit 2
-commit 3
 This repository contains the following:
 
 - **Microsoft Azure IoT Hub device SDK for C#** to connect client devices to Azure IoT Hub with .NET.
